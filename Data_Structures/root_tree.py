@@ -34,7 +34,6 @@ def normalize_arabic(text: str) -> str:
     and unify Alef variants."""
     if not text:
         return ""
-
     text = text.replace(" ", "").replace("\t", "").replace("\n", "")
     text = text.replace(TATWEEL, "")
     text = "".join(ALEF_VARIANTS.get(ch, ch) for ch in text)
@@ -44,15 +43,16 @@ def normalize_arabic(text: str) -> str:
 
 def is_arabic_letter(ch: str) -> bool:
     """
-    Accept common Arabic letters by Unicode block.
     Arabic letters are mainly in: \u0621 - \u064A
+    Includes Alef Maksura (ى = \u0649).
     """
     return "\u0621" <= ch <= "\u064A"
 
 
 def validate_dashed_root_with_reason(raw_root: str) -> Optional[str]:
-    # 1) Check Arabic letters first (ignore dashes + spaces)
-    letters_only = raw_root.replace("-", "").replace(" ", "")
+    normalized = normalize_arabic(raw_root)
+
+    letters_only = normalized.replace("-", "")
     if not letters_only:
         return "Root must contain letters."
     if not all(is_arabic_letter(ch) for ch in letters_only):
@@ -60,14 +60,15 @@ def validate_dashed_root_with_reason(raw_root: str) -> Optional[str]:
     if len(letters_only) != 3:
         return "Root must have exactly 3 letters."
 
-    # 2) Then check dashes and structure
-    if raw_root.count("-") != 2:
+    if normalized.count("-") != 2:
         return "Root must contain exactly two dashes (example: ك-ت-ب)."
-    parts = raw_root.split("-")
+
+    parts = normalized.split("-")
     if not all(parts):
         return "Missing letter between dashes."
     if not all(len(part) == 1 for part in parts):
         return "Each part must be a single letter."
+
     return None
 
 
@@ -80,13 +81,20 @@ def to_compact_root(raw_root: str) -> str:
     Convert a dashed root to compact form: ك-ت-ب -> كتب
     """
     normalized = normalize_arabic(raw_root)
-    return "".join(ch for ch in normalized if ch != "-")
+    compact = "".join(ch for ch in normalized if ch != "-")
+    if len(compact) != 3:
+        raise ValueError(f"Expected 3 letters, got {len(compact)}")
+    return compact
 
 
 def format_dashed(compact_root: str) -> str:
     """
     Convert compact root to dashed form: كتب -> ك-ت-ب
     """
+    if len(compact_root) != 3:
+        raise ValueError(f"Root must be exactly 3 letters, got {len(compact_root)}")
+    if not all(is_arabic_letter(ch) for ch in compact_root):
+        raise ValueError("Root must contain only Arabic letters.")
     return "-".join(compact_root)
 
 
@@ -103,18 +111,16 @@ class DerivedWordNode:
 class DerivedWordList:
     """
     Linked list to store derived words for a root.
-    Uses a set for O(1) lookup (no duplicates).
+    Ensures uniqueness by linear search.
     """
 
     def __init__(self) -> None:
         self.head: Optional[DerivedWordNode] = None
-        self._words_set: set[str] = set()
         self._size: int = 0
 
     def add(self, word: str) -> bool:
-        if word in self._words_set:
+        if self.contains(word):
             return False
-        self._words_set.add(word)
         node = DerivedWordNode(word)
         node.next = self.head
         self.head = node
@@ -122,7 +128,12 @@ class DerivedWordList:
         return True
 
     def contains(self, word: str) -> bool:
-        return word in self._words_set
+        current = self.head
+        while current:
+            if current.word == word:
+                return True
+            current = current.next
+        return False
 
     def to_list(self) -> List[str]:
         words = []
@@ -209,7 +220,10 @@ class RootBST:
         return None
 
     def delete(self, raw_root: str) -> bool:
-        """Delete a root. Returns True if deleted."""
+        error = validate_dashed_root_with_reason(raw_root)
+        if error:
+            return False
+
         compact = to_compact_root(raw_root)
         self.root, deleted = self._delete_recursive(self.root, compact)
         if deleted:
@@ -272,7 +286,7 @@ class RootBST:
     # ---------- Batch Operations ----------
 
     def get_all_derivatives(self) -> Dict[str, List[str]]:
-        result: Dict[str, List[str]] = {}
+        result = {}
 
         def _collect(node: Optional[RootNode]):
             if node is None:

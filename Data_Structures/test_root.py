@@ -37,7 +37,6 @@ invalid_roots = [
     "ك-ت",
     "ك ت ب",
     "invalid"
-    ""
 ]
 
 for r in invalid_roots:
