@@ -1,0 +1,18 @@
+True
+True
+False
+True
+False
+True
+['ق-ر-ا', 'ك-ت-ب']
+Invalid format caught: Root must contain exactly two dashes (example: ك-ت-ب).
+Loaded from file: 21
+['ا-ك-ل', 'ج-ل-س', 'ح-س-ب', 'ح-م-ل', 'خ-ر-ج', 'د-خ-ل', 'د-ر-س', 'ذ-ه-ب', 'ر-ج-ع', 'ر-ك-ب', 'س-م-ع', 'ش-ر-ب', 'ص-ن-ع', 'ع-ل-م', 'ع-م-ل', 'ف-ت-ح', 'ف-ع-ل', 'ف-ه-م', 'ق-ر-ا', 'ك-ت-ب', 'ل-ع-ب', 'ن-ز-ل', 'و-ج-د']
+Rejected ك-ت-ب-ا: Root must have exactly 3 letters.
+Rejected a-b-c: Only Arabic letters are allowed.
+Rejected كتابة: Root must have exactly 3 letters.
+Rejected كتب: Root must contain exactly two dashes (example: ك-ت-ب).
+Rejected ك--ت-ب: Root must contain exactly two dashes (example: ك-ت-ب).
+Rejected ك-ت: Root must have exactly 3 letters.
+Rejected ك ت ب: Root must contain exactly two dashes (example: ك-ت-ب).
+Rejected invalid: Only Arabic letters are allowed.
