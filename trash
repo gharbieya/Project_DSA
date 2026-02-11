@@ -1,9 +1,12 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, List, Generator, Dict
-from linked_list import DerivedWordList
 
-# Normalization tool
+
+# ---------------------------
+# Normalization Utilities
+# ---------------------------
+
 DIACRITICS = set([
     "\u064b",  # Tanwin Fath
     "\u064c",  # Tanwin Damm
@@ -95,7 +98,58 @@ def format_dashed(compact_root: str) -> str:
     return "-".join(compact_root)
 
 
+# ---------------------------
+# Linked List for Derived Words
+# ---------------------------
+
+@dataclass
+class DerivedWordNode:
+    word: str
+    next: Optional["DerivedWordNode"] = None
+
+
+class DerivedWordList:
+    """
+    Linked list to store derived words for a root.
+    Ensures uniqueness by linear search.
+    """
+
+    def __init__(self) -> None:
+        self.head: Optional[DerivedWordNode] = None
+        self._size: int = 0
+
+    def add(self, word: str) -> bool:
+        if self.contains(word):
+            return False
+        node = DerivedWordNode(word)
+        node.next = self.head
+        self.head = node
+        self._size += 1
+        return True
+
+    def contains(self, word: str) -> bool:
+        current = self.head
+        while current:
+            if current.word == word:
+                return True
+            current = current.next
+        return False
+
+    def to_list(self) -> List[str]:
+        words = []
+        current = self.head
+        while current:
+            words.append(current.word)
+            current = current.next
+        return words
+
+    def __len__(self) -> int:
+        return self._size
+
+
+# ---------------------------
 # BST Node
+# ---------------------------
 
 @dataclass
 class RootNode:
@@ -105,7 +159,10 @@ class RootNode:
     right: Optional["RootNode"] = None
 
 
+# ---------------------------
 # BST for Roots
+# ---------------------------
+
 class RootBST:
     """
     Binary Search Tree storing Arabic roots in compact form.
@@ -116,7 +173,7 @@ class RootBST:
         self.root: Optional[RootNode] = None
         self._size: int = 0
 
-    #tree operations
+    # ---------- Core Operations ----------
 
     def insert(self, raw_root: str) -> RootNode:
         error = validate_dashed_root_with_reason(raw_root)
@@ -205,7 +262,7 @@ class RootBST:
         node = self.insert(raw_root)
         return node.derived.add(derived_word)
 
-    #Input helpers
+    # ---------- Input Helpers ----------
 
     def insert_from_user_input(self, user_input: str) -> bool:
         size_before = self._size
@@ -226,7 +283,7 @@ class RootBST:
                     continue
         return count
 
-    # ---------- Batch Operations
+    # ---------- Batch Operations ----------
 
     def get_all_derivatives(self) -> Dict[str, List[str]]:
         result = {}
@@ -255,7 +312,7 @@ class RootBST:
         _count(self.root)
         return total
 
-    #Traversal
+    # ---------- Traversal / Utility ----------
 
     def inorder(self) -> Generator[str, None, None]:
         def _inorder(node: Optional[RootNode]):
