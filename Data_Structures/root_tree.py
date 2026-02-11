@@ -1,41 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, List, Generator, Dict
+
 from linked_list import DerivedWordList
-
-# Normalization tool
-DIACRITICS = set([
-    "\u064b",  # Tanwin Fath
-    "\u064c",  # Tanwin Damm
-    "\u064d",  # Tanwin Kasr
-    "\u064e",  # Fatha
-    "\u064f",  # Damma
-    "\u0650",  # Kasra
-    "\u0651",  # Shadda
-    "\u0652",  # Sukun
-    "\u0670",  # Superscript Alef
-])
-
-ALEF_VARIANTS = {
-    "أ": "ا",
-    "إ": "ا",
-    "آ": "ا",
-    "ٱ": "ا",
-}
-
-TATWEEL = "\u0640"
-
-
-def normalize_arabic(text: str) -> str:
-    """Normalize Arabic text: remove diacritics, tatweel, spaces,
-    and unify Alef variants."""
-    if not text:
-        return ""
-    text = text.replace(" ", "").replace("\t", "").replace("\n", "")
-    text = text.replace(TATWEEL, "")
-    text = "".join(ALEF_VARIANTS.get(ch, ch) for ch in text)
-    text = "".join(ch for ch in text if ch not in DIACRITICS)
-    return text
+from normalization import normalize_root, normalize_common
 
 
 def is_arabic_letter(ch: str) -> bool:
@@ -47,7 +15,7 @@ def is_arabic_letter(ch: str) -> bool:
 
 
 def validate_dashed_root_with_reason(raw_root: str) -> Optional[str]:
-    normalized = normalize_arabic(raw_root)
+    normalized = normalize_common(raw_root)
 
     letters_only = normalized.replace("-", "")
     if not letters_only:
@@ -77,8 +45,7 @@ def to_compact_root(raw_root: str) -> str:
     """
     Convert a dashed root to compact form: ك-ت-ب -> كتب
     """
-    normalized = normalize_arabic(raw_root)
-    compact = "".join(ch for ch in normalized if ch != "-")
+    compact = normalize_root(raw_root)
     if len(compact) != 3:
         raise ValueError(f"Expected 3 letters, got {len(compact)}")
     return compact
@@ -95,7 +62,9 @@ def format_dashed(compact_root: str) -> str:
     return "-".join(compact_root)
 
 
+# ---------------------------
 # BST Node
+# ---------------------------
 
 @dataclass
 class RootNode:
@@ -105,7 +74,10 @@ class RootNode:
     right: Optional["RootNode"] = None
 
 
+# ---------------------------
 # BST for Roots
+# ---------------------------
+
 class RootBST:
     """
     Binary Search Tree storing Arabic roots in compact form.
@@ -116,7 +88,7 @@ class RootBST:
         self.root: Optional[RootNode] = None
         self._size: int = 0
 
-    #tree operations
+    # ---------- Core Operations ----------
 
     def insert(self, raw_root: str) -> RootNode:
         error = validate_dashed_root_with_reason(raw_root)
@@ -205,7 +177,7 @@ class RootBST:
         node = self.insert(raw_root)
         return node.derived.add(derived_word)
 
-    #Input helpers
+    # ---------- Input Helpers ----------
 
     def insert_from_user_input(self, user_input: str) -> bool:
         size_before = self._size
@@ -226,7 +198,7 @@ class RootBST:
                     continue
         return count
 
-    # ---------- Batch Operations
+    # ---------- Batch Operations ----------
 
     def get_all_derivatives(self) -> Dict[str, List[str]]:
         result = {}
@@ -255,7 +227,7 @@ class RootBST:
         _count(self.root)
         return total
 
-    #Traversal
+    # ---------- Traversal / Utility ----------
 
     def inorder(self) -> Generator[str, None, None]:
         def _inorder(node: Optional[RootNode]):
