@@ -33,3 +33,11 @@ def normalize_root(raw_root: str) -> str:
 def normalize_pattern(pattern: str) -> str:
     """Normalize pattern (no dashes)."""
     return normalize_common(pattern)
+
+
+def extract_root_letters(raw_root: str):
+    """Return the 3 root letters as a tuple, or None if invalid."""
+    normalized = normalize_root(raw_root)
+    if len(normalized) != 3:
+        return None
+    return normalized[0], normalized[1], normalized[2]
