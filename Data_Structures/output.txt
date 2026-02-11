@@ -1,18 +1,41 @@
-True
-True
-False
-True
-False
-True
-['ق-ر-ا', 'ك-ت-ب']
-Invalid format caught: Root must contain exactly two dashes (example: ك-ت-ب).
-Loaded from file: 21
-['ا-ك-ل', 'ج-ل-س', 'ح-س-ب', 'ح-م-ل', 'خ-ر-ج', 'د-خ-ل', 'د-ر-س', 'ذ-ه-ب', 'ر-ج-ع', 'ر-ك-ب', 'س-م-ع', 'ش-ر-ب', 'ص-ن-ع', 'ع-ل-م', 'ع-م-ل', 'ف-ت-ح', 'ف-ع-ل', 'ف-ه-م', 'ق-ر-ا', 'ك-ت-ب', 'ل-ع-ب', 'ن-ز-ل', 'و-ج-د']
-Rejected ك-ت-ب-ا: Root must have exactly 3 letters.
-Rejected a-b-c: Only Arabic letters are allowed.
-Rejected كتابة: Root must have exactly 3 letters.
-Rejected كتب: Root must contain exactly two dashes (example: ك-ت-ب).
-Rejected ك--ت-ب: Root must contain exactly two dashes (example: ك-ت-ب).
-Rejected ك-ت: Root must have exactly 3 letters.
-Rejected ك ت ب: Root must contain exactly two dashes (example: ك-ت-ب).
-Rejected invalid: Only Arabic letters are allowed.
+=== EXTREME INTEGRATION TEST (RootBST + HashTable) ===
+Loaded roots into BST: 23
+Loaded patterns into hash table: 29
+Roots in file: 23
+Patterns in table: 29
+
+[1] Existing Root + Valid Patterns
+Root 'ك-ت-ب' exists? True
+ك-ت-ب + فاعل = كاتب
+ك-ت-ب + مفعول = مكتوب
+ك-ت-ب + تفعيل = تكتيب
+ك-ت-ب + استفعال = استكتاب
+
+[2] Missing Patterns (should return None)
+ك-ت-ب + فعّول = None
+ك-ت-ب + مفاعيلة = None
+ك-ت-ب + تفعيول = None
+
+[3] Invalid Root Formats
+كتب + فاعل = None
+ك-ت + فاعل = None
+ك-ت-ب-د + فاعل = None
+k-t-b + فاعل = None
+ك--ت-ب + فاعل = None
+-ك-ت-ب + فاعل = None
+
+[4] Root Not in BST (skip derivation)
+Root 'ز-ز-ز' exists? False
+Derivation skipped (root not in BST)
+
+[5] Normalization Check (Diacritics)
+ك-ت-ب + فَاعِل = كاتب
+
+[6] Stress Derivation (Dataset x Patterns)
+Stress roots used: 20
+Stress patterns used: 20
+Total derivations attempted: 400
+Derivations produced: 400
+Time: 0.0148 seconds
+
+✅ Extreme integration test completed
