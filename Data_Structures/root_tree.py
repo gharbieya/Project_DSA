@@ -174,12 +174,17 @@ class RootBST:
         return current
 
     def add_derived_word(self, raw_root: str, derived_word: str) -> bool:
-        node = self.insert(raw_root)
+        node = self.search(raw_root)
+        if node is None:
+            return False
         return node.derived.add(derived_word)
 
     # ---------- Input Helpers ----------
 
-    def insert_from_user_input(self, user_input: str) -> bool:
+    def add_root_from_user_input(self, user_input: str) -> bool:
+        """
+        Explicit user insertion (dynamic insertion allowed by spec).
+        """
         size_before = self._size
         self.insert(user_input)
         return self._size > size_before
@@ -191,8 +196,10 @@ class RootBST:
                 raw = line.strip()
                 if not raw:
                     continue
+                size_before = self._size
                 try:
-                    if self.insert_from_user_input(raw):
+                    self.insert(raw)
+                    if self._size > size_before:
                         count += 1
                 except ValueError:
                     continue

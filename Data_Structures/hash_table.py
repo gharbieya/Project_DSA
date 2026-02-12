@@ -1,12 +1,14 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, List
+
 from normalization import normalize_pattern, extract_root_letters, validate_dashed_root
 
 
 @dataclass
 class PatternRuleNode:
     pattern: str
+    rule: str
     next: Optional["PatternRuleNode"] = None
 
 
@@ -14,29 +16,53 @@ class PatternRuleChain:
     def __init__(self) -> None:
         self.head: Optional[PatternRuleNode] = None
 
-    def insert(self, pattern: str) -> bool:
+    def insert(self, pattern: str, rule: str) -> bool:
         current = self.head
         while current:
             if current.pattern == pattern:
                 return False
             current = current.next
-        node = PatternRuleNode(pattern)
+        node = PatternRuleNode(pattern, rule)
         node.next = self.head
         self.head = node
         return True
 
-    def find(self, pattern: str) -> bool:
+    def find_node(self, pattern: str) -> Optional[PatternRuleNode]:
         current = self.head
         while current:
             if current.pattern == pattern:
+                return current
+            current = current.next
+        return None
+
+    def find(self, pattern: str) -> bool:
+        return self.find_node(pattern) is not None
+
+    def update(self, pattern: str, rule: str) -> bool:
+        node = self.find_node(pattern)
+        if node is None:
+            return False
+        node.rule = rule
+        return True
+
+    def remove(self, pattern: str) -> bool:
+        prev = None
+        current = self.head
+        while current:
+            if current.pattern == pattern:
+                if prev is None:
+                    self.head = current.next
+                else:
+                    prev.next = current.next
                 return True
+            prev = current
             current = current.next
         return False
 
 
 class PatternHashTable:
     """
-    Hash table for patterns (pattern = rule).
+    Hash table for patterns (pattern + rule).
     Chaining with linked lists.
     Fixed table size (37).
     """
@@ -68,12 +94,17 @@ class PatternHashTable:
             value = (value * base + ord(ch)) % mod
         return value
 
-    def insert(self, pattern: object) -> bool:
+    def insert(self, pattern: object, rule: Optional[str] = None) -> bool:
         normalized = self._normalize_and_validate(pattern)
         if normalized is None:
             return False
+
+        normalized_rule = self._normalize_and_validate(rule or normalized)
+        if normalized_rule is None:
+            return False
+
         idx = self._hash(normalized)
-        inserted = self._buckets[idx].insert(normalized)
+        inserted = self._buckets[idx].insert(normalized, normalized_rule)
         if inserted:
             self._size += 1
         return inserted
@@ -84,6 +115,32 @@ class PatternHashTable:
             return False
         idx = self._hash(normalized)
         return self._buckets[idx].find(normalized)
+
+    def update(self, pattern: object, new_rule: str) -> bool:
+        normalized = self._normalize_and_validate(pattern)
+        normalized_rule = self._normalize_and_validate(new_rule)
+        if normalized is None or normalized_rule is None:
+            return False
+        idx = self._hash(normalized)
+        return self._buckets[idx].update(normalized, normalized_rule)
+
+    def remove(self, pattern: object) -> bool:
+        normalized = self._normalize_and_validate(pattern)
+        if normalized is None:
+            return False
+        idx = self._hash(normalized)
+        removed = self._buckets[idx].remove(normalized)
+        if removed:
+            self._size -= 1
+        return removed
+
+    def get_rule(self, pattern: object) -> Optional[str]:
+        normalized = self._normalize_and_validate(pattern)
+        if normalized is None:
+            return None
+        idx = self._hash(normalized)
+        node = self._buckets[idx].find_node(normalized)
+        return None if node is None else node.rule
 
     def size(self) -> int:
         return self._size
@@ -100,12 +157,10 @@ class PatternHashTable:
         return count
 
     def derive(self, raw_root: str, pattern: object) -> Optional[str]:
-        normalized = self._normalize_and_validate(pattern)
-        if normalized is None:
+        rule = self.get_rule(pattern)
+        if rule is None:
             return None
-        if not self.contains(normalized):
-            return None
-        return derive_from_normalized_pattern(raw_root, normalized)
+        return derive_from_normalized_pattern(raw_root, rule)
 
 
 def derive_from_normalized_pattern(raw_root: str, normalized_pattern: str) -> Optional[str]:
