@@ -7,14 +7,6 @@ from Data_Structures.normalization import normalize_common
 from Engine.generator import MorphologicalGenerator
 
 
-def _iter_patterns(table: PatternHashTable) -> Iterable[str]:
-    for chain in table._buckets:
-        current = chain.head
-        while current:
-            yield current.pattern
-            current = current.next
-
-
 class ValidationResult(TypedDict):
     result: Literal["OUI", "NON"]
     pattern: Optional[str]
@@ -42,7 +34,7 @@ class MorphologicalValidator:
 
         normalized_word = normalize_common(raw_word)
 
-        for pattern in _iter_patterns(self._patterns):
+        for pattern in self._patterns.iter_patterns():
             gen = self._generator.generate_one(raw_root, pattern, store=False)
             if gen["ok"] and gen["word"] is not None:
                 if normalize_common(gen["word"]) == normalized_word:

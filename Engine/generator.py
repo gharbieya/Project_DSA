@@ -5,14 +5,6 @@ from Data_Structures.root_tree import RootBST
 from Data_Structures.hash_table import PatternHashTable
 
 
-def _iter_patterns(table: PatternHashTable) -> Iterable[str]:
-    for chain in table._buckets:
-        current = chain.head
-        while current:
-            yield current.pattern
-            current = current.next
-
-
 class GenerationResult(TypedDict):
     ok: bool
     root: str
@@ -87,6 +79,6 @@ class MorphologicalGenerator:
             }]
 
         results: List[GenerationResult] = []
-        for pattern in _iter_patterns(self._patterns):
+        for pattern in self._patterns.iter_patterns():
             results.append(self.generate_one(raw_root, pattern, store=True))
         return results

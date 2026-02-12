@@ -142,6 +142,13 @@ class PatternHashTable:
         node = self._buckets[idx].find_node(normalized)
         return None if node is None else node.rule
 
+    def iter_patterns(self):
+        for chain in self._buckets:
+            current = chain.head
+            while current:
+                yield current.pattern
+                current = current.next
+
     def size(self) -> int:
         return self._size
 
