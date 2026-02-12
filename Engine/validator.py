@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Optional, Iterable
+from typing import Optional, Iterable, TypedDict, Literal
 
 from Data_Structures.root_tree import RootBST
 from Data_Structures.hash_table import PatternHashTable
@@ -13,6 +13,11 @@ def _iter_patterns(table: PatternHashTable) -> Iterable[str]:
         while current:
             yield current.pattern
             current = current.next
+
+
+class ValidationResult(TypedDict):
+    result: Literal["OUI", "NON"]
+    pattern: Optional[str]
 
 
 class MorphologicalValidator:
@@ -31,16 +36,17 @@ class MorphologicalValidator:
         self._roots = root_tree
         self._patterns = pattern_table
 
-    def validate(self, raw_root: str, raw_word: str) -> Dict[str, Optional[str]]:
+    def validate(self, raw_root: str, raw_word: str) -> ValidationResult:
         if self._roots.search(raw_root) is None:
             return {"result": "NON", "pattern": None}
 
         normalized_word = normalize_common(raw_word)
 
         for pattern in _iter_patterns(self._patterns):
-            gen = self._generator.generate_one(raw_root, pattern)
+            gen = self._generator.generate_one(raw_root, pattern, store=False)
             if gen["ok"] and gen["word"] is not None:
                 if normalize_common(gen["word"]) == normalized_word:
+                    self._roots.add_derived_word(raw_root, gen["word"])
                     return {"result": "OUI", "pattern": pattern}
 
         return {"result": "NON", "pattern": None}

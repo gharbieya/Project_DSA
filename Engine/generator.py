@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional, Iterable, TypedDict, Literal
+from typing import List, Optional, Iterable, TypedDict
 
 from Data_Structures.root_tree import RootBST
 from Data_Structures.hash_table import PatternHashTable
@@ -31,7 +31,12 @@ class MorphologicalGenerator:
         self._roots = root_tree
         self._patterns = pattern_table
 
-    def generate_one(self, raw_root: str, raw_pattern: str) -> GenerationResult:
+    def generate_one(
+        self,
+        raw_root: str,
+        raw_pattern: str,
+        store: bool = True,
+    ) -> GenerationResult:
         if self._roots.search(raw_root) is None:
             return {
                 "ok": False,
@@ -60,7 +65,8 @@ class MorphologicalGenerator:
                 "error": "DERIVATION_FAILED",
             }
 
-        self._roots.add_derived_word(raw_root, derived)
+        if store:
+            self._roots.add_derived_word(raw_root, derived)
 
         return {
             "ok": True,
@@ -82,5 +88,5 @@ class MorphologicalGenerator:
 
         results: List[GenerationResult] = []
         for pattern in _iter_patterns(self._patterns):
-            results.append(self.generate_one(raw_root, pattern))
+            results.append(self.generate_one(raw_root, pattern, store=True))
         return results
