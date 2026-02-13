@@ -2,7 +2,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, List
 
-from normalization import normalize_pattern, extract_root_letters, validate_dashed_root
+from Data_Structures.normalization import (
+    normalize_pattern,
+    extract_root_letters,
+    validate_dashed_root,
+    is_arabic_letter,
+)
+
+
+SHADDA = "\u0651"
 
 
 @dataclass
@@ -80,8 +88,15 @@ class PatternHashTable:
         normalized = normalize_pattern(pattern)
         if not normalized:
             return None
-        if len(normalized) < 3:
+        # ✅ min length = 4 (rejects فعل)
+        if len(normalized) < 4:
             return None
+        # Arabic letters or shadda only
+        for ch in normalized:
+            if ch == SHADDA:
+                continue
+            if not is_arabic_letter(ch):
+                return None
         if "ف" not in normalized or "ع" not in normalized or "ل" not in normalized:
             return None
         return normalized
@@ -97,17 +112,18 @@ class PatternHashTable:
     def insert(self, pattern: object, rule: Optional[str] = None) -> bool:
         normalized = self._normalize_and_validate(pattern)
         if normalized is None:
-            return False
+            raise ValueError("Invalid pattern format.")
 
         normalized_rule = self._normalize_and_validate(rule or normalized)
         if normalized_rule is None:
-            return False
+            raise ValueError("Invalid rule format.")
 
         idx = self._hash(normalized)
         inserted = self._buckets[idx].insert(normalized, normalized_rule)
-        if inserted:
-            self._size += 1
-        return inserted
+        if not inserted:
+            raise ValueError("Pattern already exists.")
+        self._size += 1
+        return True
 
     def contains(self, pattern: object) -> bool:
         normalized = self._normalize_and_validate(pattern)
@@ -119,20 +135,26 @@ class PatternHashTable:
     def update(self, pattern: object, new_rule: str) -> bool:
         normalized = self._normalize_and_validate(pattern)
         normalized_rule = self._normalize_and_validate(new_rule)
-        if normalized is None or normalized_rule is None:
-            return False
+        if normalized is None:
+            raise ValueError("Invalid pattern format.")
+        if normalized_rule is None:
+            raise ValueError("Invalid rule format.")
         idx = self._hash(normalized)
-        return self._buckets[idx].update(normalized, normalized_rule)
+        updated = self._buckets[idx].update(normalized, normalized_rule)
+        if not updated:
+            raise ValueError("Pattern not found.")
+        return True
 
     def remove(self, pattern: object) -> bool:
         normalized = self._normalize_and_validate(pattern)
         if normalized is None:
-            return False
+            raise ValueError("Invalid pattern format.")
         idx = self._hash(normalized)
         removed = self._buckets[idx].remove(normalized)
-        if removed:
-            self._size -= 1
-        return removed
+        if not removed:
+            raise ValueError("Pattern not found.")
+        self._size -= 1
+        return True
 
     def get_rule(self, pattern: object) -> Optional[str]:
         normalized = self._normalize_and_validate(pattern)
@@ -159,8 +181,11 @@ class PatternHashTable:
                 raw = line.strip()
                 if not raw:
                     continue
-                if self.insert(raw):
+                try:
+                    self.insert(raw)
                     count += 1
+                except ValueError:
+                    continue
         return count
 
     def derive(self, raw_root: str, pattern: object) -> Optional[str]:

@@ -2,8 +2,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, List, Generator, Dict
 
-from linked_list import DerivedWordList
-from normalization import normalize_root, normalize_common
+from Data_Structures.linked_list import DerivedWordList
+from Data_Structures.normalization import normalize_root, normalize_common
 
 
 def is_arabic_letter(ch: str) -> bool:
@@ -105,7 +105,7 @@ class RootBST:
         current = self.root
         while True:
             if compact == current.root:
-                return current
+                raise ValueError("Root already exists.")
             elif compact < current.root:
                 if current.left is None:
                     current.left = RootNode(root=compact, derived=DerivedWordList())
@@ -196,8 +196,8 @@ class RootBST:
                 raw = line.strip()
                 if not raw:
                     continue
-                size_before = self._size
                 try:
+                    size_before = self._size
                     self.insert(raw)
                     if self._size > size_before:
                         count += 1

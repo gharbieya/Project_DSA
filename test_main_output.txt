@@ -1,0 +1,82 @@
+=== EXTREME SYSTEM TEST ===
+Loaded roots: 23
+Loaded patterns: 29
+
+[1] Root Insertion Tests
+س-م-ع -> Root already exists.
+د-خ-ل -> Root already exists.
+Inserted: غ-ف-ل
+كتب -> Root must contain exactly two dashes (example: ك-ت-ب).
+ك-ت -> Root must have exactly 3 letters.
+ك-ت-ب-د -> Root must have exactly 3 letters.
+a-b-c -> Only Arabic letters are allowed.
+ك--ت-ب -> Root must contain exactly two dashes (example: ك-ت-ب).
+
+[2] Pattern CRUD Tests
+مفاعل -> Pattern already exists.
+مفاعل -> Pattern already exists.
+مفاعل -> updated to مفاعِل
+مفاعل -> removed
+
+[3] Invalid Pattern Tests
+فاعلx -> Invalid pattern format.
+فعل -> Invalid pattern format.
+سسس -> Invalid pattern format.
+كتابة -> Invalid pattern format.
+مفا -> Invalid pattern format.
+ -> Invalid pattern format.
+12 -> Invalid pattern format.
+ف -> Invalid pattern format.
+عل -> Invalid pattern format.
+مت -> Invalid pattern format.
+
+[4] Generation Tests
+ك-ت-ب + مفعال = مكتاب
+ك-ت-ب + افعل = اكتب
+ك-ت-ب + فواعيل = كواتيب
+ك-ت-ب + تفعيل = تكتيب
+ك-ت-ب + تفعلة = تكتبة
+
+[5] Family Generation (first 5)
+ك-ت-ب + مفعال = مكتاب
+ك-ت-ب + افعل = اكتب
+ك-ت-ب + فواعيل = كواتيب
+ك-ت-ب + تفعيل = تكتيب
+ك-ت-ب + تفعلة = تكتبة
+
+[6] Validation Tests
+Validate مكتاب with ك-ت-ب -> {'result': 'OUI', 'pattern': 'مفعال'}
+Validate غير_موجود with ك-ت-ب -> {'result': 'NON', 'pattern': None}
+
+[7] Validated Derivatives
+اكتتاب (freq 1)
+تكتّب (freq 1)
+كتبان (freq 1)
+مكتبة (freq 1)
+كاتوب (freq 1)
+كتيبان (freq 1)
+مكتوب (freq 1)
+مكاتبة (freq 1)
+اكتتب (freq 1)
+مكاتيب (freq 1)
+استكتاب (freq 1)
+كاتب (freq 1)
+مكتب (freq 1)
+انكتاب (freq 1)
+كتّاب (freq 1)
+كتبة (freq 1)
+كتيب (freq 1)
+تكاتب (freq 1)
+كواتب (freq 1)
+كتابة (freq 1)
+كتوب (freq 1)
+اكتاب (freq 1)
+مستكتب (freq 1)
+تكتبة (freq 2)
+تكتيب (freq 2)
+كواتيب (freq 2)
+اكتب (freq 2)
+مكتاب (freq 4)
+
+[8] Stress Test (20 roots x 20 patterns)
+Generated: 400 in 0.0104 sec
