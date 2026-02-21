@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import webbrowser, os, pathlib
+webbrowser.open(pathlib.Path('UI/interface.html').resolve().as_uri())
+
 import os
 
 from Data_Structures.root_tree import RootBST, format_dashed
