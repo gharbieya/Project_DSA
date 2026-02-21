@@ -384,7 +384,7 @@
     <div class="panel">
       <div class="panel-head gold">➕ إضافة جذر سريع</div>
       <div class="panel-body">
-        <input type="text" id="quick-add-root" placeholder="كتب أو ك-ت-ب" style="margin-bottom:.42rem;"
+        <input type="text" id="quick-add-root" placeholder="ك-ت-ب" style="margin-bottom:.42rem;"
                onkeydown="if(event.key==='Enter') quickAddRoot()">
         <button class="btn btn-gold btn-full btn-sm" onclick="quickAddRoot()">إضافة</button>
         <div id="qar-msg"></div>
@@ -413,9 +413,9 @@
         <div class="panel-body">
           <div class="form-group">
             <label class="fl">الجذر الثلاثي</label>
-            <input type="text" id="gen-root" placeholder="كتب أو ك-ت-ب"
+            <input type="text" id="gen-root" placeholder="ك-ت-ب"
                    onkeydown="if(event.key==='Enter') doGenSelected()">
-            <div class="hint">3 حروف — مع أو بدون شرطات</div>
+            <div class="hint">صيغة: حرف-حرف-حرف</div>
           </div>
           <div class="form-group">
             <label class="fl">اختر الأوزان المطلوبة</label>
@@ -439,7 +439,7 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.95rem;">
             <div class="form-group">
               <label class="fl">الجذر الثلاثي</label>
-              <input type="text" id="val-root" placeholder="كتب أو ك-ت-ب">
+              <input type="text" id="val-root" placeholder="ك-ت-ب">
             </div>
             <div class="form-group">
               <label class="fl">الكلمة المراد فحصها</label>
@@ -482,18 +482,18 @@
               <div class="dict-section-title" style="font-size:.92rem;">🌳 الجذور</div>
               <div class="form-group">
                 <label class="fl">إضافة جذر</label>
-                <input type="text" id="mgmt-add-root" placeholder="كتب أو ك-ت-ب"
+                <input type="text" id="mgmt-add-root" placeholder="ك-ت-ب"
                        onkeydown="if(event.key==='Enter') mgmtAddRoot()">
               </div>
               <button class="btn btn-teal btn-full" onclick="mgmtAddRoot()" style="margin-bottom:.65rem;">➕ إضافة</button>
               <div class="form-group">
                 <label class="fl">حذف جذر</label>
-                <input type="text" id="mgmt-del-root" placeholder="كتب أو ك-ت-ب">
+                <input type="text" id="mgmt-del-root" placeholder="ك-ت-ب">
               </div>
               <button class="btn btn-red btn-full" onclick="mgmtDelRoot()" style="margin-bottom:.65rem;">🗑 حذف</button>
               <div class="form-group">
                 <label class="fl">بحث عن جذر</label>
-                <input type="text" id="mgmt-search-root" placeholder="كتب أو ك-ت-ب"
+                <input type="text" id="mgmt-search-root" placeholder="ك-ت-ب"
                        onkeydown="if(event.key==='Enter') mgmtSearchRoot()">
               </div>
               <button class="btn btn-ghost btn-full" onclick="mgmtSearchRoot()">🔍 بحث</button>
@@ -600,52 +600,18 @@ function norm(s)    { return s.replace(DIACRITICS,'').replace(/[آأإٱ]/g, c=>
 function isAr(c)    { return c >= '\u0621' && c <= '\u064A'; }
 function compact(d) { return norm(d).replace(/-/g,''); }
 function dashed(c)  { return c.split('').join('-'); }
-
-/**
- * Accept BOTH "كتب" (plain 3 letters) and "ك-ت-ب" (dashed).
- * Always returns the canonical dashed form, or throws a string error.
- */
-function parseRoot(raw) {
-  const stripped = norm(raw).replace(/-/g, '').replace(/\s/g, '');
-  if (!stripped)                          throw 'الجذر فارغ';
-  if (!stripped.split('').every(isAr))    throw 'يجب أن تكون الحروف عربية فقط';
-  if (stripped.length !== 3)              throw 'يجب أن يحتوي الجذر على 3 حروف بالضبط';
-  return dashed(stripped); // always return canonical ك-ت-ب form
-}
-
-// Kept for backward-compat — returns null (ok) or error string
 function validateRoot(raw) {
-  try { parseRoot(raw); return null; }
-  catch(e) { return e; }
+  const n = norm(raw), l = n.replace(/-/g,'');
+  if (!l)                             return 'الجذر فارغ';
+  if (!l.split('').every(isAr))       return 'يجب أن تكون الحروف عربية فقط';
+  if (l.length !== 3)                 return 'يجب أن يحتوي الجذر على 3 حروف فقط';
+  if (n.split('-').length - 1 !== 2)  return 'الصيغة الصحيحة: حرف-حرف-حرف  (مثال: ك-ت-ب)';
+  return null;
 }
 
 // ── DATA STORE ────────────────────────────────────────────
 const roots    = {};  // compact3 -> { derived:{} }
 const patterns = {};  // normPat  -> displayForm
-
-const LS_ROOTS_KEY = 'dsa_extra_roots';   // localStorage key for user-added roots
-const LS_PATS_KEY  = 'dsa_extra_pats';    // localStorage key for user-added patterns
-
-function lsGetRoots() {
-  try { return JSON.parse(localStorage.getItem(LS_ROOTS_KEY) || '[]'); } catch { return []; }
-}
-function lsSaveRoots() {
-  // Save all compact roots that are NOT in the original file defaults
-  localStorage.setItem(LS_ROOTS_KEY, JSON.stringify(Object.keys(roots)));
-}
-function lsGetPats() {
-  try { return JSON.parse(localStorage.getItem(LS_PATS_KEY) || '[]'); } catch { return []; }
-}
-function lsSavePats() {
-  localStorage.setItem(LS_PATS_KEY, JSON.stringify(
-    Object.entries(patterns).map(([np, display]) => display)
-  ));
-}
-
-function addRootToStore(dashedRoot) {
-  const c = compact(dashedRoot);
-  if (!roots[c]) roots[c] = { derived:{} };
-}
 
 // ── DYNAMIC LOAD ──────────────────────────────────────────
 async function fetchText(path) {
@@ -659,7 +625,7 @@ async function initData() {
     fetchText('../Data/patterns.txt'),
   ]);
 
-  // ── Load roots from file ──
+  // ── Load roots ──
   const rootLines = rootsTxt
     ? rootsTxt.split('\n')
     : ['ك-ت-ب','د-ر-س','ع-ل-م','ف-ه-م','ق-ر-أ','س-م-ع','ذ-ه-ب','ج-ل-س','ح-س-ب','ع-م-ل',
@@ -667,16 +633,10 @@ async function initData() {
        'ف-ت-ح','ح-م-ل','و-ج-د'];
   rootLines.forEach(line => {
     const r = line.trim();
-    if (!r) return;
-    try { addRootToStore(parseRoot(r)); } catch {}
+    if (r && !validateRoot(r)) { const c = compact(r); if (!roots[c]) roots[c] = { derived:{} }; }
   });
 
-  // ── Merge user-added roots from localStorage ──
-  lsGetRoots().forEach(c => {
-    if (c && c.length === 3) { if (!roots[c]) roots[c] = { derived:{} }; }
-  });
-
-  // ── Load patterns from file ──
+  // ── Load patterns ──
   const patLines = patsTxt
     ? patsTxt.split('\n')
     : ['فاعل','مفعول','فعّال','مفعل','تفعيل','مفاعلة','مفعال','افتعال','افتعل',
@@ -684,11 +644,6 @@ async function initData() {
        'افعال','فعلان','فعلة','فعيلان','مفاعل','مفعلة','مفاعيل','فواعل','فواعيل','فعالة','تفعلة'];
   patLines.forEach(line => {
     const p = line.trim();
-    if (p) { const n = norm(p); if (!patterns[n]) patterns[n] = p; }
-  });
-
-  // ── Merge user-added patterns from localStorage ──
-  lsGetPats().forEach(p => {
     if (p) { const n = norm(p); if (!patterns[n]) patterns[n] = p; }
   });
 
@@ -903,14 +858,14 @@ function checkAll()   { document.querySelectorAll('#gen-patterns input').forEach
 function uncheckAll() { document.querySelectorAll('#gen-patterns input').forEach(cb => cb.checked = false); }
 
 function doGenSelected() {
-  const raw = document.getElementById('gen-root').value.trim();
-  let canonical;
-  try { canonical = parseRoot(raw); } catch(e) { document.getElementById('gen-result').innerHTML = rbox(e,'err'); return; }
-  if (!roots[compact(canonical)]) { document.getElementById('gen-result').innerHTML = rbox('الجذر غير موجود في الشجرة — أضفه من تبويب الإدارة.','err'); return; }
+  const rawRoot = document.getElementById('gen-root').value.trim();
+  const err = validateRoot(rawRoot);
+  if (err) { document.getElementById('gen-result').innerHTML = rbox(err,'err'); return; }
+  if (!roots[compact(rawRoot)]) { document.getElementById('gen-result').innerHTML = rbox('الجذر غير موجود في الشجرة — أضفه من تبويب الإدارة.','err'); return; }
   const checked = [...document.querySelectorAll('#gen-patterns input:checked')].map(cb => cb.value);
   if (!checked.length) { document.getElementById('gen-result').innerHTML = rbox('اختر وزنًا على الأقل.','err'); return; }
   const items = checked.map(np => {
-    const word = derive(canonical, np);
+    const word = derive(rawRoot, np);
     const d    = patterns[np];
     const df   = SCHEME_DEFS[norm(d)] || SCHEME_DEFS[d] || {};
     return word
@@ -919,7 +874,7 @@ function doGenSelected() {
   }).join('');
   document.getElementById('gen-result').innerHTML = `
     <div style="margin-top:.88rem;">
-      <div class="dict-section-title" style="font-size:.9rem;">نتائج الجذر ${canonical} (${checked.length} وزن)</div>
+      <div class="dict-section-title" style="font-size:.9rem;">نتائج الجذر ${rawRoot} (${checked.length} وزن)</div>
       <div class="fam-grid">${items}</div>
     </div>`;
 }
@@ -928,11 +883,11 @@ function doGenSelected() {
 function doValidate() {
   const rawRoot = document.getElementById('val-root').value.trim();
   const rawWord = document.getElementById('val-word').value.trim();
-  let canonical;
-  try { canonical = parseRoot(rawRoot); } catch(e) { document.getElementById('val-result').innerHTML = rbox(e,'err'); return; }
+  const err = validateRoot(rawRoot);
+  if (err) { document.getElementById('val-result').innerHTML = rbox(err,'err'); return; }
   if (!rawWord) { document.getElementById('val-result').innerHTML = rbox('أدخل الكلمة المراد فحصها','err'); return; }
-  if (!roots[compact(canonical)]) { document.getElementById('val-result').innerHTML = rbox(`الجذر ${canonical} غير موجود في الشجرة`,'err'); return; }
-  const res = doValidateWord(canonical, rawWord);
+  if (!roots[compact(rawRoot)]) { document.getElementById('val-result').innerHTML = rbox('الجذر غير موجود في الشجرة','err'); return; }
+  const res = doValidateWord(rawRoot, rawWord);
   if (res.result === 'OUI') {
     const df = SCHEME_DEFS[norm(res.display||'')] || SCHEME_DEFS[res.display||''] || {};
     document.getElementById('val-result').innerHTML = `
@@ -940,7 +895,7 @@ function doValidate() {
         <div class="val-result-yes">نعم ✅</div>
         <div style="margin-top:.65rem;font-size:.9rem;">
           الكلمة <strong style="font-family:'Amiri',serif;font-size:1.12rem;">${rawWord}</strong>
-          مشتقة من الجذر <strong>${canonical}</strong>
+          مشتقة من الجذر <strong>${rawRoot}</strong>
         </div>
         <div style="margin-top:.42rem;">
           على وزن <span style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--teal);">${res.display||res.pattern}</span>
@@ -952,7 +907,7 @@ function doValidate() {
     document.getElementById('val-result').innerHTML = `
       <div class="rbox err" style="text-align:center;padding:1.35rem;">
         <div class="val-result-no">لا ❌</div>
-        <div style="margin-top:.48rem;">الكلمة <strong>${rawWord}</strong> لا تنتمي مورفولوجيًا إلى الجذر <strong>${canonical}</strong></div>
+        <div style="margin-top:.48rem;">الكلمة <strong>${rawWord}</strong> لا تنتمي مورفولوجيًا إلى الجذر <strong>${rawRoot}</strong></div>
       </div>`;
   }
 }
@@ -995,13 +950,12 @@ function doExplore() {
 // ── MANAGE ────────────────────────────────────────────────
 function mgmtAddRoot() {
   const raw = document.getElementById('mgmt-add-root').value.trim();
-  let canonical;
-  try { canonical = parseRoot(raw); } catch(e) { document.getElementById('mgmt-root-msg').innerHTML = rbox(e,'err'); return; }
-  const cmp = compact(canonical);
-  if (roots[cmp]) { document.getElementById('mgmt-root-msg').innerHTML = rbox(`الجذر ${canonical} موجود بالفعل.`,'warn'); return; }
+  const err = validateRoot(raw);
+  if (err) { document.getElementById('mgmt-root-msg').innerHTML = rbox(err,'err'); return; }
+  const cmp = compact(raw);
+  if (roots[cmp]) { document.getElementById('mgmt-root-msg').innerHTML = rbox('الجذر موجود بالفعل.','warn'); return; }
   roots[cmp] = { derived:{} };
-  lsSaveRoots();
-  document.getElementById('mgmt-root-msg').innerHTML = rbox(`✅ تمت إضافة الجذر ${canonical}`,'ok');
+  document.getElementById('mgmt-root-msg').innerHTML = rbox(`✅ تمت إضافة الجذر ${raw}`,'ok');
   document.getElementById('mgmt-add-root').value = '';
   renderAll(); renderMgmtAll(); populateExpSelect(); updateStats(); toast('✅ تمت إضافة الجذر');
 }
@@ -1009,25 +963,20 @@ function mgmtAddRoot() {
 function mgmtDelRoot() {
   const raw = document.getElementById('mgmt-del-root').value.trim();
   if (!raw) { document.getElementById('mgmt-root-msg').innerHTML = rbox('أدخل الجذر المراد حذفه.','err'); return; }
-  let canonical;
-  try { canonical = parseRoot(raw); } catch(e) { document.getElementById('mgmt-root-msg').innerHTML = rbox(e,'err'); return; }
-  const cmp = compact(canonical);
-  if (!roots[cmp]) { document.getElementById('mgmt-root-msg').innerHTML = rbox(`الجذر ${canonical} غير موجود.`,'err'); return; }
+  const cmp = compact(raw);
+  if (!roots[cmp]) { document.getElementById('mgmt-root-msg').innerHTML = rbox('الجذر غير موجود.','err'); return; }
   delete roots[cmp];
-  lsSaveRoots();
-  document.getElementById('mgmt-root-msg').innerHTML = rbox(`✅ تم حذف الجذر ${canonical}`,'ok');
+  document.getElementById('mgmt-root-msg').innerHTML = rbox(`✅ تم حذف الجذر ${raw}`,'ok');
   document.getElementById('mgmt-del-root').value = '';
   renderAll(); renderMgmtAll(); populateExpSelect(); updateStats(); toast('🗑 تم حذف الجذر');
 }
 
 function mgmtSearchRoot() {
   const raw = document.getElementById('mgmt-search-root').value.trim();
-  let canonical;
-  try { canonical = parseRoot(raw); } catch(e) { document.getElementById('mgmt-root-msg').innerHTML = rbox(e,'err'); return; }
-  const cmp = compact(canonical);
+  const cmp = compact(raw);
   document.getElementById('mgmt-root-msg').innerHTML = roots[cmp]
-    ? rbox(`✅ الجذر ${canonical} موجود في الشجرة الثنائية`,'ok')
-    : rbox(`❌ الجذر ${canonical} غير موجود في الشجرة.`,'err');
+    ? rbox('✅ الجذر موجود في الشجرة الثنائية','ok')
+    : rbox('❌ الجذر غير موجود في الشجرة.','err');
 }
 
 function mgmtAddPat() {
@@ -1038,7 +987,6 @@ function mgmtAddPat() {
   }
   if (patterns[np]) { document.getElementById('mgmt-pat-msg').innerHTML = rbox('الوزن موجود بالفعل.','warn'); return; }
   patterns[np] = raw;
-  lsSavePats();
   document.getElementById('mgmt-pat-msg').innerHTML = rbox(`✅ تمت إضافة الوزن ${raw}`,'ok');
   document.getElementById('mgmt-add-pat').value = '';
   renderAll(); renderMgmtAll(); renderGenPatterns(); updateStats(); toast('✅ تمت إضافة الوزن');
@@ -1049,7 +997,6 @@ function mgmtDelPat() {
   const np  = norm(raw);
   if (!patterns[np]) { document.getElementById('mgmt-pat-msg').innerHTML = rbox('الوزن غير موجود.','err'); return; }
   delete patterns[np];
-  lsSavePats();
   document.getElementById('mgmt-pat-msg').innerHTML = rbox(`✅ تم حذف الوزن ${raw}`,'ok');
   document.getElementById('mgmt-del-pat').value = '';
   renderAll(); renderMgmtAll(); renderGenPatterns(); updateStats(); toast('🗑 تم حذف الوزن');
@@ -1075,19 +1022,14 @@ function renderMgmtAll() {
 // ── QUICK ADD (sidebar) ───────────────────────────────────
 function quickAddRoot() {
   const raw = document.getElementById('quick-add-root').value.trim();
-  let canonical;
-  try { canonical = parseRoot(raw); } catch(e) {
-    document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--red);margin-top:.25rem;">${e}</div>`; return;
-  }
-  const cmp = compact(canonical);
-  if (roots[cmp]) {
-    document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--gold);margin-top:.25rem;">الجذر ${canonical} موجود بالفعل</div>`; return;
-  }
+  const err = validateRoot(raw);
+  if (err) { document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--red);margin-top:.25rem;">${err}</div>`; return; }
+  const cmp = compact(raw);
+  if (roots[cmp]) { document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--gold);margin-top:.25rem;">موجود بالفعل</div>`; return; }
   roots[cmp] = { derived:{} };
-  lsSaveRoots();
   document.getElementById('quick-add-root').value = '';
-  document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--green);margin-top:.25rem;">✅ تمت إضافة ${canonical}</div>`;
-  renderAll(); populateExpSelect(); updateStats(); toast(`✅ تمت إضافة الجذر ${canonical}`);
+  document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--green);margin-top:.25rem;">✅ تمت الإضافة</div>`;
+  renderAll(); populateExpSelect(); updateStats(); toast('✅ تمت إضافة الجذر');
 }
 
 // ── SCHEMES ENCYCLOPEDIA ──────────────────────────────────
