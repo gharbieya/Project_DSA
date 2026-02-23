@@ -7,10 +7,6 @@ from Data_Structures.normalization import normalize_root, normalize_common
 
 
 def is_arabic_letter(ch: str) -> bool:
-    """
-    Arabic letters are mainly in: \u0621 - \u064A
-    Includes Alef Maksura (ى = \u0649).
-    """
     return "\u0621" <= ch <= "\u064A"
 
 
@@ -40,55 +36,40 @@ def validate_dashed_root_with_reason(raw_root: str) -> Optional[str]:
 def validate_dashed_root(raw_root: str) -> bool:
     return validate_dashed_root_with_reason(raw_root) is None
 
-
+# Convert a dashed root to compact form (storing): ك-ت-ب -> كتب
 def to_compact_root(raw_root: str) -> str:
-    """
-    Convert a dashed root to compact form: ك-ت-ب -> كتب
-    """
     compact = normalize_root(raw_root)
     if len(compact) != 3:
         raise ValueError(f"Expected 3 letters, got {len(compact)}")
     return compact
 
-
+# Convert compact root to dashed form (displaying): كتب -> ك-ت-ب
 def format_dashed(compact_root: str) -> str:
-    """
-    Convert compact root to dashed form: كتب -> ك-ت-ب
-    """
     if len(compact_root) != 3:
         raise ValueError(f"Root must be exactly 3 letters, got {len(compact_root)}")
     if not all(is_arabic_letter(ch) for ch in compact_root):
         raise ValueError("Root must contain only Arabic letters.")
     return "-".join(compact_root)
 
-
-# ---------------------------
-# BST Node
-# ---------------------------
-
+# BST Node definition
 @dataclass
 class RootNode:
-    root: str  # compact root: كتب
-    derived: DerivedWordList
+    root: str  #compact root
+    derived: DerivedWordList  #linked list of derived words
     left: Optional["RootNode"] = None
     right: Optional["RootNode"] = None
 
 
-# ---------------------------
-# BST for Roots
-# ---------------------------
+# BST for Roots ----
 
+# BST stores arabic roots in compact form using Unicode
 class RootBST:
-    """
-    Binary Search Tree storing Arabic roots in compact form.
-    Unicode ordering is used by Python string comparison.
-    """
 
     def __init__(self) -> None:
         self.root: Optional[RootNode] = None
         self._size: int = 0
 
-    # ---------- Core Operations ----------
+    #Core Operations ----
 
     def insert(self, raw_root: str) -> RootNode:
         error = validate_dashed_root_with_reason(raw_root)
@@ -173,22 +154,20 @@ class RootBST:
             current = current.left
         return current
 
+    #Adding derived words to the linked list
     def add_derived_word(self, raw_root: str, derived_word: str) -> bool:
         node = self.search(raw_root)
         if node is None:
             return False
         return node.derived.add(derived_word)
 
-    # ---------- Input Helpers ----------
-
+    #User root insertion
     def add_root_from_user_input(self, user_input: str) -> bool:
-        """
-        Explicit user insertion (dynamic insertion allowed by spec).
-        """
         size_before = self._size
         self.insert(user_input)
         return self._size > size_before
 
+    #Loading roots.txt and inserting roots
     def load_roots_from_file(self, file_path: str) -> int:
         count = 0
         with open(file_path, "r", encoding="utf-8") as f:
@@ -205,8 +184,9 @@ class RootBST:
                     continue
         return count
 
-    # ---------- Batch Operations ----------
+    #Batch Operations -----
 
+    #collecting all derivatives for every root
     def get_all_derivatives(self) -> Dict[str, List[str]]:
         result = {}
 
@@ -220,6 +200,7 @@ class RootBST:
         _collect(self.root)
         return result
 
+    #counting all derivatives
     def count_total_derivatives(self) -> int:
         total = 0
 
@@ -234,8 +215,9 @@ class RootBST:
         _count(self.root)
         return total
 
-    # ---------- Traversal / Utility ----------
+    #Traversal / Utility ------
 
+    #Sorting roots
     def inorder(self) -> Generator[str, None, None]:
         def _inorder(node: Optional[RootNode]):
             if node is None:
@@ -246,6 +228,7 @@ class RootBST:
 
         yield from _inorder(self.root)
 
+    #Listing all roots in dashed format
     def list_roots(self, dashed: bool = True) -> List[str]:
         roots = list(self.inorder())
         if dashed:

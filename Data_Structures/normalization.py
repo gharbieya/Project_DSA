@@ -32,14 +32,14 @@ def _normalize_base(text: str) -> str:
 
 
 def normalize_common(text: str) -> str:
-    """Normalize Arabic text and remove ALL diacritics (including shadda)."""
+    """Normalize Arabic text and remove ALL diacritics (including shadda)"""
     text = _normalize_base(text)
     text = "".join(ch for ch in text if ch not in DIACRITICS)
     return text
 
 
 def normalize_root(raw_root: str) -> str:
-    """Normalize root and remove dashes."""
+    """Normalize root and remove dashes"""
     normalized = normalize_common(raw_root)
     return "".join(ch for ch in normalized if ch != "-")
 
@@ -47,7 +47,7 @@ def normalize_root(raw_root: str) -> str:
 def normalize_pattern(pattern: str) -> str:
     """
     Normalize pattern:
-    - remove harakat (diacritics) but KEEP shadda
+    - remove diacritics but KEEP shadda
     - normalize Alef variants
     """
     text = _normalize_base(pattern)

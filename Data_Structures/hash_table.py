@@ -9,21 +9,22 @@ from Data_Structures.normalization import (
     is_arabic_letter,
 )
 
+SHADDA = "\u0651" #Unicode for shadda
 
-SHADDA = "\u0651"
-
-
+#Linked list Node
 @dataclass
 class PatternRuleNode:
     pattern: str
     rule: str
     next: Optional["PatternRuleNode"] = None
 
+#Linked list node -----
 
-class PatternRuleChain:
+class PatternRuleChain:    #If multiple patterns hash to the same index, they are stored in this linked list
     def __init__(self) -> None:
         self.head: Optional[PatternRuleNode] = None
 
+    #insert new pattern + rule to chain and reject duplicates
     def insert(self, pattern: str, rule: str) -> bool:
         current = self.head
         while current:
@@ -35,6 +36,7 @@ class PatternRuleChain:
         self.head = node
         return True
 
+    #find pattern node
     def find_node(self, pattern: str) -> Optional[PatternRuleNode]:
         current = self.head
         while current:
@@ -43,9 +45,11 @@ class PatternRuleChain:
             current = current.next
         return None
 
+    #find if pattern exists
     def find(self, pattern: str) -> bool:
         return self.find_node(pattern) is not None
 
+    #Update rule if pattern exists
     def update(self, pattern: str, rule: str) -> bool:
         node = self.find_node(pattern)
         if node is None:
@@ -53,6 +57,7 @@ class PatternRuleChain:
         node.rule = rule
         return True
 
+    #Remove pattern from chain
     def remove(self, pattern: str) -> bool:
         prev = None
         current = self.head
@@ -68,11 +73,13 @@ class PatternRuleChain:
         return False
 
 
+#Hash Table implementation ------
+
 class PatternHashTable:
     """
-    Hash table for patterns (pattern + rule).
-    Chaining with linked lists.
-    Fixed table size (37).
+    Hash table for patterns (pattern + rule)
+    Chaining with linked lists
+    Fixed table size (37)
     """
 
     def __init__(self) -> None:
@@ -82,32 +89,42 @@ class PatternHashTable:
             PatternRuleChain() for _ in range(self._capacity)
         ]
 
+    #Pattern normalization and validation
     def _normalize_and_validate(self, pattern: object) -> Optional[str]:
+        #Must be a string
         if not isinstance(pattern, str):
             return None
         normalized = normalize_pattern(pattern)
         if not normalized:
             return None
-        # ✅ min length = 4 (rejects فعل)
+        #min length = 4 (rejects فعل)
         if len(normalized) < 4:
             return None
-        # Arabic letters or shadda only
+        #Arabic letters or shadda only
         for ch in normalized:
             if ch == SHADDA:
                 continue
             if not is_arabic_letter(ch):
                 return None
+        #Must contain ف ع ل
         if "ف" not in normalized or "ع" not in normalized or "ل" not in normalized:
             return None
         return normalized
 
+    #Hash function
     def _hash(self, key: str) -> int:
+        """
+        Polynomial rolling hash:
+        h(k) = (Σ ord(ch) * 131^i) mod capacity
+        """
         base = 131
         mod = self._capacity
         value = 0
         for ch in key:
             value = (value * base + ord(ch)) % mod
         return value
+
+    #Core operations of hash table----
 
     def insert(self, pattern: object, rule: Optional[str] = None) -> bool:
         normalized = self._normalize_and_validate(pattern)
@@ -155,7 +172,8 @@ class PatternHashTable:
             raise ValueError("Pattern not found.")
         self._size -= 1
         return True
-
+    
+    #Return rule associated with pattern
     def get_rule(self, pattern: object) -> Optional[str]:
         normalized = self._normalize_and_validate(pattern)
         if normalized is None:
@@ -164,6 +182,7 @@ class PatternHashTable:
         node = self._buckets[idx].find_node(normalized)
         return None if node is None else node.rule
 
+    #Generator to iterate over all patterns
     def iter_patterns(self):
         for chain in self._buckets:
             current = chain.head
@@ -174,6 +193,7 @@ class PatternHashTable:
     def size(self) -> int:
         return self._size
 
+    #load patterns.txt and skips invalid and duplicate patterns
     def load_patterns_from_file(self, file_path: str) -> int:
         count = 0
         with open(file_path, "r", encoding="utf-8") as f:
@@ -188,14 +208,19 @@ class PatternHashTable:
                     continue
         return count
 
+    #Derivation
     def derive(self, raw_root: str, pattern: object) -> Optional[str]:
         rule = self.get_rule(pattern)
         if rule is None:
             return None
         return derive_from_normalized_pattern(raw_root, rule)
 
+# Core Derivation Function ------
 
 def derive_from_normalized_pattern(raw_root: str, normalized_pattern: str) -> Optional[str]:
+    """
+    Replace ف ع ل inside pattern with the 3 root letters.
+    """
     if not validate_dashed_root(raw_root):
         return None
 
