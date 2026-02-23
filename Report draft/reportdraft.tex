@@ -33,7 +33,7 @@
 \begin{document}
 
 \begin{center}
-{\Large \textbf{Rapport}}\\[0.2cm]
+{\Large \textbf{Rapport Technique}}\\[0.2cm]
 {\normalsize Moteur de Génération et Validation Morphologique Arabe}\\[0.3cm]
 {\small Eya Gharbi -- Zaghouani Ayoub}\\
 {\small Classe 1ING4}
@@ -41,7 +41,7 @@
 
 \section{Présentation générale}
 
-Ce projet implémente un moteur de dérivation morphologique arabe capable de générer des formes dérivées à partir d’un radical trilitère et d’un schème, et de valider si un mot dérivé appartient à un radical donné.
+Ce projet implémente un moteur de dérivation morphologique arabe capable de générer des formes dérivées à partir d’un radical trilitère et d’un schème, et de valider si un mot dérivé appartient à un radical donné. L’objectif principal est d’optimiser les performances en choisissant des structures de données adaptées afin de minimiser la complexité algorithmique moyenne.
 
 \section{Chargement des données}
 
@@ -60,22 +60,28 @@ La comparaison repose sur l’ordre Unicode.
 
 Chaque nœud contient :
 \begin{itemize}[nosep]
-\item la racine compacte.
-\item une liste chaînée de dérivés.
+\item la racine compacte,
+\item une liste chaînée de dérivés,
 \item deux pointeurs (gauche/droite).
 \end{itemize}
 
-\textbf{Normalisation :}
-suppression des diacritiques, unification des variantes d’alef, vérification stricte du format.
+\textbf{Normalisation :} suppression des diacritiques, unification des variantes d’alef et vérification stricte du format.
+
+\textbf{Insertion :} descente récursive selon l’ordre lexicographique. Les doublons sont refusés.
+
+\textbf{Suppression :} trois cas classiques (feuille, un enfant, deux enfants avec remplacement par le successeur).
+
+Une structure linéaire aurait impliqué une recherche en $O(n)$.  
+L’ABR permet une recherche en $O(\log n)$ en moyenne, réduisant significativement le coût des accès fréquents aux racines.
 
 \subsection{Liste chaînée}
 
 Chaque racine possède une liste de mots dérivés (mot + fréquence).  
-Elle permet un stockage léger et évite les recalculs.
+Cette structure permet un stockage léger et évite les recalculs lors des validations répétées.
 
 \subsection{Table de hachage}
 
-Les schèmes sont stockés dans une table de hachage de taille fixe $P=37$ (nombre premier).  
+Les schèmes sont stockés dans une table de hachage de taille fixe $m=37$ (nombre premier).
 
 Fonction de hachage polynomiale :
 
@@ -83,47 +89,43 @@ Fonction de hachage polynomiale :
 h(k)=\left(\sum_{i=0}^{|k|-1} \operatorname{ord}(k_i)\cdot131^i\right)\bmod 37
 \]
 
-\textbf{Type d’entrée.} 
-Les schèmes sont validés :
-\begin{itemize}
-    \item présence des lettres \textarabic{ف ع ل}.
-    \item lettres arabes uniquement.
-    \item conservation de la shadda (si présente).
+\textbf{Validation des schèmes :}
+\begin{itemize}[nosep]
+\item présence des lettres \textarabic{ف ع ل},
+\item lettres arabes uniquement,
+\item conservation éventuelle de la shadda.
 \end{itemize}
 
-\textbf{Normalisation:}
-Chaque schème est normalisé (diacritiques supprimés sauf shadda, variantes d’alef unifiées).  
-Les schèmes doivent contenir \textarabic{ف ع ل} et respecter une longueur minimale.
+\textbf{Normalisation :} suppression des diacritiques (sauf shadda) et unification des variantes Unicode.
 
-\textbf{Règle de dérivation:} Elle est identique au schème normalisé (\texttt{rule = pattern}).  
+\textbf{Règle de dérivation :} identique au schème normalisé (\texttt{rule = pattern}).  
 La dérivation consiste à substituer \textarabic{ف ع ل} par les lettres de la racine.
 
-\textbf{Chaînage:} Chaque case de la table pointe vers une \textbf{liste chaînée} de schèmes.  
-Si deux schèmes ont le même hash (collisions), ils sont ajoutés à la liste du même bucket.  
-La recherche parcourt cette liste jusqu’à trouver la clé exacte.
+\textbf{Chaînage :} chaque bucket contient une liste chaînée.  
+En cas de collision, les schèmes sont ajoutés à la liste correspondante.
 
+Le pire cas correspond à une collision totale où tous les schèmes sont placés dans un seul bucket. En pratique, la fonction polynomiale et le choix d’un nombre premier rendent ce cas hautement improbable.
 
 \section{Algorithmes}
 
 \subsection{Génération}
 
 \begin{enumerate}[nosep]
-\item Normalisation de la racine donnée
+\item Normalisation de la racine
 \item Recherche dans l’ABR
 \item Recherche du schème dans la table de hachage
-\item Application de la règle de dérivation
-\item Stockage dans la liste chaînée de la racine
+\item Application de la règle
+\item Stockage dans la liste chaînée
 \end{enumerate}
-
-Complexité :
 
 \[
 T_{\text{gen}} = O(\log n) + O(|s|) = O(\log n)
 \]
 
-Pour la génération d'une famille sur les $p$ schèmes de longueur moyenne $\bar{s}$ :
+Pour la génération d’une famille sur $P$ schèmes de longueur moyenne $\bar{s}$ :
+
 \[
-T_{\text{family}}(n, p) = O(\log n) + O\!\left(\sum_{i=1}^{p}(1 + \lvert s_i\rvert)\right) = O(\log n + p \cdot \bar{s})
+T_{\text{family}}(n,P)=O(\log n + P\cdot\bar{s})
 \]
 
 \subsection{Validation}
@@ -131,17 +133,18 @@ T_{\text{family}}(n, p) = O(\log n) + O\!\left(\sum_{i=1}^{p}(1 + \lvert s_i\rve
 Validation par régénération exhaustive :
 
 \begin{enumerate}[nosep]
-\item Recherche racine dans l’ABR
+\item Recherche de la racine dans l’ABR
 \item Parcours des $P$ schèmes
-\item Génération + comparaison
+\item Génération et comparaison
 \end{enumerate}
 
 \[
 T_{\text{val}} = O(\log n + P)
 \]
+
 Cette méthode garantit la cohérence morphologique et évite les ambiguïtés d’une reconstruction inverse plus complexe.
 
-\section{Complexité Algorithmique}
+\section{Complexité algorithmique}
 
 Soient :
 \begin{itemize}[nosep]
@@ -162,8 +165,8 @@ Recherche hash           & $O(1)$              & $O(P)$ \\
 Insertion hash           & $O(1)$              & $O(P)$ \\
 Génération (1 mot)       & $O(\log n)$         & $O(n)$ \\
 Validation (1 mot)       & $O(\log n + P)$     & $O(n + P)$ \\
-Chargement racines       & $O(n\log n)$         & $O(n^2)$ \\
-Chargement schèmes       & $O(P)$               & $O(P^2)$ \\
+Chargement racines       & $O(n\log n)$        & $O(n^2)$ \\
+Chargement schèmes       & $O(P)$              & $O(P^2)$ \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -181,14 +184,10 @@ Une table de hachage permet un accès en $O(1)$ en moyenne, plus performant qu�
 La taille $P$ en nombre premier plus grand que le nombre de schèmes réduit les collisions.  
 Le chaînage a été choisi plutôt que l’adressage ouvert afin de simplifier la gestion des collisions et éviter les problèmes liés au redimensionnement.
 
-\textbf{Liste chaînée:}  
-Chaque racine peut produire un ensemble variable de dérivés.  
-Une liste chaînée permet un stockage flexible sans pré-allocation et une rapidité d'accès aux éléments.  
-Le coût reste acceptable car le nombre de dérivés par racine est limité et l’approche évite la complexité d’une structure plus lourde.
-
 \textbf{Validation exhaustive:}  
-La validation se fait par régénération de tous les schèmes, puis comparaison.
-Une reconstruction inverse serait plus complexe et ambiguë morphologiquement, donc ce choix garantit la cohérence morphologique.
+La validation repose sur la régénération complète des formes possibles à partir de tous les schèmes.  
+Une reconstruction inverse serait plus complexe et ambiguë morphologiquement.  
+La régénération garantit la cohérence avec l’algorithme de génération et assure l’unicité de la logique de dérivation.
 
 \textbf{Normalisation:}  
 La suppression des diacritiques et l’unification des variantes Unicode assurent des comparaisons robustes et évitent les incohérences dues aux différentes formes d’écriture arabe.
@@ -204,7 +203,10 @@ La suppression des diacritiques et l’unification des variantes Unicode assuren
 
 \section{Point d’originalité}
 
-Le système est exploité comme un \textbf{dictionnaire morphologique} : chaque schème est associé à une définition, et chaque dérivé validé peut être affiché avec son sens linguistique. Cette exploitation donne une valeur appliquée aux structures de données.
-Cette exploitation démontre l’application concrète des structures algorithmiques développées.
+Le moteur est exploité comme un dictionnaire morphologique : chaque schème peut être associé à une définition, et chaque dérivé validé peut être enrichi sémantiquement. Cette exploitation illustre l’application concrète des structures de données implémentées.
+\section{Conclusion}
+
+Le système combine ABR, table de hachage et listes chaînées de manière cohérente.  
+Les performances sont dominées par $O(\log n)$ en moyenne pour les racines et $O(1)$ amorti pour les schèmes, ce qui rend le moteur efficace et extensible.
 
 \end{document}
