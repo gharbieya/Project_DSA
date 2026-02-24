@@ -4,331 +4,540 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>محرك الاشتقاق العربي — القاموس المورفولوجي</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink:          #1a1208;
-    --parchment:    #f5edd6;
-    --parchment-dk: #e3d0a8;
-    --gold:         #b8860b;
-    --gold-light:   #d4a820;
-    --gold-pale:    #fdf3d0;
-    --copper:       #7a3b0e;
-    --teal:         #17524f;
-    --teal-light:   #1f7a74;
-    --teal-pale:    #e0f2f1;
-    --red:          #8b1a1a;
-    --cream:        #fdfaf2;
-    --shadow:       rgba(26,18,8,.15);
-    --green:        #1a5c2a;
-    --green-pale:   #e0f2e5;
+    /* ── DARK MODE — richer, warmer charcoal ── */
+    --bg:          #111009;
+    --bg-1:        #181610;
+    --bg-2:        #201e16;
+    --bg-3:        #28251c;
+    --bg-4:        #312e23;
+
+    /* Borders — warm-tinted, not cold grey */
+    --line:        #2e2b20;
+    --line-2:      #3a3628;
+    --line-3:      #4a4535;
+
+    /* Primary — richer sage/teal */
+    --sage:        #3d8c6e;
+    --sage-bright: #52b088;
+    --sage-dim:    #2d6e54;
+    --sage-glow:   rgba(61,140,110,0.18);
+    --sage-pale:   rgba(61,140,110,0.10);
+    --sage-ultra:  rgba(61,140,110,0.05);
+
+    /* Secondary — deeper amber/gold */
+    --sand:        #c8942a;
+    --sand-bright: #e0ad42;
+    --sand-dim:    #a87820;
+    --sand-glow:   rgba(200,148,42,0.18);
+    --sand-pale:   rgba(200,148,42,0.10);
+
+    /* Semantic */
+    --rose:        #c45560;
+    --rose-glow:   rgba(196,85,96,0.16);
+    --rose-pale:   rgba(196,85,96,0.09);
+    --mint:        #3a9e78;
+    --mint-glow:   rgba(58,158,120,0.16);
+    --mint-pale:   rgba(58,158,120,0.09);
+
+    /* Text */
+    --text:        #e8e0cc;
+    --text-2:      #a89e84;
+    --text-3:      #6b6248;
+    --text-4:      #46412e;
+    --white:       #f5efd8;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Tajawal', sans-serif;
-    background: var(--parchment); color: var(--ink); min-height: 100vh;
+
+  /* ── LIGHT MODE — exact parchment/gold/teal palette ── */
+  body.light {
+    /* Surfaces mapped to parchment family */
+    --bg:          #f5edd6;   /* parchment */
+    --bg-1:        #fdfaf2;   /* cream */
+    --bg-2:        #f5edd6;   /* parchment */
+    --bg-3:        #e3d0a8;   /* parchment-dk */
+    --bg-4:        #d6bf90;
+
+    /* Borders */
+    --line:        #e3d0a8;   /* parchment-dk */
+    --line-2:      #cbb880;
+    --line-3:      #b8a060;
+
+    /* Primary mapped to teal */
+    --sage:        #17524f;   /* teal */
+    --sage-bright: #1f7a74;   /* teal-light */
+    --sage-dim:    #0f3a38;
+    --sage-glow:   rgba(23,82,79,0.15);
+    --sage-pale:   #e0f2f1;   /* teal-pale */
+    --sage-ultra:  rgba(23,82,79,0.05);
+
+    /* Secondary mapped to gold */
+    --sand:        #b8860b;   /* gold */
+    --sand-bright: #d4a820;   /* gold-light */
+    --sand-dim:    #7a3b0e;   /* copper */
+    --sand-glow:   rgba(184,134,11,0.15);
+    --sand-pale:   #fdf3d0;   /* gold-pale */
+
+    /* Semantic */
+    --rose:        #8b1a1a;   /* red */
+    --rose-glow:   rgba(139,26,26,0.12);
+    --rose-pale:   rgba(139,26,26,0.08);
+    --mint:        #1a5c2a;   /* green */
+    --mint-glow:   rgba(26,92,42,0.12);
+    --mint-pale:   #e0f2e5;   /* green-pale */
+
+    /* Text */
+    --text:        #1a1208;   /* ink */
+    --text-2:      #3d2a10;
+    --text-3:      #7a5a28;
+    --text-4:      #a88040;
+    --white:       #1a1208;   /* ink (headings) */
+  }
+
+  body.light {
     background-image:
-      radial-gradient(ellipse at 15% 0%,   rgba(184,134,11,.07) 0%, transparent 55%),
-      radial-gradient(ellipse at 85% 100%, rgba(23,82,79,.07)   0%, transparent 55%),
+      radial-gradient(ellipse 70% 45% at 0% 0%,   rgba(23,82,79,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 100% 100%, rgba(184,134,11,0.06) 0%, transparent 60%),
       url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 1l3 8h8l-7 5 3 8-7-5-7 5 3-8-7-5h8z' fill='%23b8860b' fill-opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  /* Theme toggle button */
+  .theme-toggle {
+    width: 38px; height: 22px;
+    background: var(--bg-3); border: 1px solid var(--line-2);
+    border-radius: 11px; cursor: pointer;
+    position: relative; transition: background .25s, border-color .25s;
+    flex-shrink: 0;
+  }
+  .theme-toggle::after {
+    content: '';
+    position: absolute; top: 3px; right: 3px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--sage-bright);
+    transition: transform .25s, background .25s;
+  }
+  body.light .theme-toggle::after {
+    transform: translateX(-16px);
+    background: var(--sand-bright);
+  }
+  .theme-toggle-wrap {
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .theme-icon {
+    font-size: .8rem; color: var(--text-3);
+    user-select: none; transition: color .25s;
+    line-height: 1;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background .3s, color .3s;
+    background-image:
+      radial-gradient(ellipse 70% 45% at 0% 0%,   rgba(61,140,110,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 100% 100%, rgba(200,148,42,0.04) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c8942a' fill-opacity='0.018'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .panel, header, .search-section, .stat-chip,
+  .root-pill, .scheme-card, .fam-item, .pat-item,
+  .feat-card, .feat-card-head, .stab, .btn,
+  input[type="text"], select, .rbox {
+    transition: background .25s, border-color .25s, color .2s;
   }
 
   /* ── LOADING ── */
   #loading-screen {
-    position: fixed; inset: 0; background: var(--ink);
+    position: fixed; inset: 0; background: var(--bg);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 9999; color: var(--gold-pale); gap: 1rem; transition: opacity .4s;
+    z-index: 9999; gap: 1.4rem; transition: opacity .5s;
   }
-  #loading-screen .ls-title { font-family: 'Amiri', serif; font-size: 2rem; color: var(--gold-pale); }
-  #loading-screen .ls-sub   { font-size: .85rem; opacity: .5; }
-  .spinner {
-    width: 38px; height: 38px;
-    border: 3px solid rgba(184,134,11,.2); border-top-color: var(--gold);
-    border-radius: 50%; animation: spin .8s linear infinite;
+  .ls-monogram {
+    font-family: 'Scheherazade New', serif;
+    font-size: 3rem; color: var(--sage-bright);
+    letter-spacing: .2em;
+    animation: breathe 2.4s ease-in-out infinite;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .ls-bar {
+    width: 120px; height: 2px; background: var(--bg-4); border-radius: 2px; overflow: hidden;
+  }
+  .ls-bar::after {
+    content: ''; display: block; height: 100%; width: 40%;
+    background: var(--sage-bright);
+    animation: slide 1.2s ease-in-out infinite;
+  }
+  .ls-label { font-size: .7rem; color: var(--text-3); letter-spacing: .18em; text-transform: uppercase; }
+  @keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.97)} }
+  @keyframes slide   { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
+  @keyframes fadeUp  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
   /* ── HEADER ── */
   header {
-    background: linear-gradient(150deg, #1a1208 0%, #2e1a06 60%, #1a3330 100%);
-    color: var(--gold-pale); padding: 1.8rem 2rem 1.4rem;
-    position: relative; overflow: hidden;
-    border-bottom: 3px solid var(--gold); box-shadow: 0 6px 30px var(--shadow);
-  }
-  header::before {
-    content: ''; position: absolute; inset: 0;
-    background: repeating-linear-gradient(-45deg, transparent, transparent 18px,
-      rgba(184,134,11,.035) 18px, rgba(184,134,11,.035) 19px);
-    pointer-events: none;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--line);
+    padding: 0 2rem;
+    position: sticky; top: 0; z-index: 100;
   }
   .header-inner {
-    max-width: 1440px; margin: 0 auto;
+    max-width: 1480px; margin: 0 auto;
     display: flex; align-items: center; justify-content: space-between;
-    gap: 1.5rem; flex-wrap: wrap; position: relative;
+    gap: 1.5rem; flex-wrap: wrap; padding: 1rem 0;
   }
-  .header-logo .title-ar {
-    font-family: 'Amiri', serif;
-    font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 700;
-    color: var(--gold-pale); text-shadow: 0 2px 14px rgba(184,134,11,.4); line-height: 1.1;
+  .header-brand { display: flex; align-items: center; gap: .85rem; }
+  .brand-icon {
+    width: 40px; height: 40px;
+    background: var(--sage-pale);
+    border: 1px solid var(--sage);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Scheherazade New', serif;
+    font-size: 1.45rem; color: var(--sage-bright);
+    flex-shrink: 0;
   }
-  .header-logo .title-fr { font-size: .74rem; color: var(--gold-pale); opacity: .5; margin-top: .2rem; }
-  .header-badges { display: flex; gap: .5rem; flex-wrap: wrap; }
-  .hbadge {
-    background: rgba(184,134,11,.18); border: 1px solid rgba(184,134,11,.35);
-    border-radius: 20px; padding: .25rem .9rem;
-    font-size: .77rem; color: var(--gold-pale); text-align: center;
+  .brand-text .title-ar {
+    font-size: clamp(1rem, 2.2vw, 1.45rem);
+    font-weight: 900; color: var(--white);
+    letter-spacing: -.01em; line-height: 1.15;
   }
-  .hbadge strong { color: var(--gold-light); font-size: .93rem; display: block; }
+  .brand-text .title-fr {
+    font-size: .63rem; color: var(--text-3); margin-top: .15rem; font-weight: 300;
+  }
+  .header-stats { display: flex; gap: .5rem; }
+  .stat-chip {
+    background: var(--bg-2); border: 1px solid var(--line-2);
+    border-radius: 7px; padding: .38rem .85rem; text-align: center; min-width: 66px;
+  }
+  .stat-chip .sc-val { font-size: 1.25rem; font-weight: 900; color: var(--sage-bright); line-height: 1; display: block; }
+  .stat-chip .sc-lbl { font-size: .58rem; color: var(--text-3); margin-top: .1rem; display: block; text-transform: uppercase; letter-spacing: .06em; }
 
-  /* ── SEARCH BAR ── */
-  .search-section {
-    background: linear-gradient(90deg, #1a1208, #2e1a06);
-    padding: .65rem 2rem .95rem; border-bottom: 2px solid var(--gold);
+  /* ── SEARCH ── */
+  .search-section { background: var(--bg-1); border-bottom: 1px solid var(--line); padding: .65rem 2rem .9rem; }
+  .search-inner { max-width: 1480px; margin: 0 auto; }
+  .search-row {
+    display: flex; gap: .55rem; align-items: center;
+    background: var(--bg-2); border: 1px solid var(--line-2);
+    border-radius: 9px; padding: .38rem .45rem .38rem .9rem;
+    transition: border-color .2s;
   }
-  .search-inner { max-width: 1440px; margin: 0 auto; }
-  .search-box {
-    display: flex; align-items: center; gap: .6rem;
-    background: var(--cream); border: 2px solid var(--gold);
-    border-radius: 40px; padding: .38rem .7rem .38rem 1.2rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  .search-row:focus-within { border-color: var(--sage); }
+  .search-row input {
+    flex: 1; background: transparent; border: none; outline: none;
+    font-family: 'Scheherazade New', serif; font-size: 1.06rem;
+    color: var(--text); direction: rtl;
   }
-  .search-box input {
-    flex: 1; border: none; background: transparent;
-    font-family: 'Amiri', serif; font-size: 1.12rem;
-    color: var(--ink); outline: none; direction: rtl;
-  }
-  .search-box input::placeholder { color: #aaa; }
-  .search-icon { color: var(--gold); font-size: 1.05rem; }
-  .search-tabs { display: flex; gap: .38rem; margin-top: .6rem; flex-wrap: wrap; }
+  .search-row input::placeholder { color: var(--text-4); }
+  .search-ico { color: var(--text-3); font-size: 1rem; }
+
+  .nav-tabs { display: flex; gap: .28rem; margin-top: .6rem; flex-wrap: wrap; }
   .stab {
-    padding: .26rem .82rem; border: 1px solid rgba(255,255,255,.15);
-    border-radius: 20px; background: transparent;
-    color: rgba(255,255,255,.5); font-family: 'Tajawal', sans-serif;
-    font-size: .76rem; cursor: pointer; transition: all .2s;
+    padding: .26rem .82rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-3);
+    font-family: 'Cairo', sans-serif;
+    font-size: .72rem; font-weight: 600;
+    cursor: pointer; transition: all .16s;
   }
-  .stab:hover { background: rgba(184,134,11,.2); color: var(--gold-pale); }
-  .stab.active { background: var(--gold); color: var(--ink); font-weight: 700; }
+  .stab:hover { border-color: var(--line-3); color: var(--text-2); background: var(--bg-2); }
+  .stab.active {
+    background: var(--sage-pale);
+    border-color: var(--sage);
+    color: var(--sage-bright);
+    font-weight: 700;
+  }
 
   /* ── LAYOUT ── */
   .page-body {
-    max-width: 1440px; margin: 0 auto;
-    padding: 1.1rem 1.1rem 3rem;
-    display: grid; grid-template-columns: 265px 1fr 270px;
-    gap: 1.05rem; align-items: start;
+    max-width: 1480px; margin: 0 auto;
+    padding: 1.1rem 1.2rem 4rem;
+    display: grid; grid-template-columns: 252px 1fr 252px;
+    gap: .95rem; align-items: start;
   }
 
   /* ── PANELS ── */
   .panel {
-    background: var(--cream); border-radius: 14px;
-    border: 1px solid var(--parchment-dk);
-    box-shadow: 0 2px 14px var(--shadow); overflow: hidden;
+    background: var(--bg-1); border: 1px solid var(--line);
+    border-radius: 11px; overflow: hidden;
   }
   .panel-head {
-    padding: .62rem .95rem; font-family: 'Amiri', serif;
-    font-size: .96rem; font-weight: 700;
-    display: flex; align-items: center; gap: .38rem; color: #fff;
+    padding: .6rem .95rem;
+    font-size: .68rem; font-weight: 700;
+    display: flex; align-items: center; gap: .42rem;
+    letter-spacing: .08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
   }
-  .panel-head.teal  { background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
-  .panel-head.gold  { background: linear-gradient(90deg, var(--copper), var(--gold-light)); }
-  .panel-head.dark  { background: linear-gradient(90deg, var(--ink), #3a2508); }
-  .panel-head.green { background: linear-gradient(90deg, var(--green), #267a3a); }
+  .panel-head.sage  { color: var(--sage-bright);  background: var(--sage-ultra); }
+  .panel-head.sand  { color: var(--sand);          background: var(--sand-pale); }
+  .panel-head.muted { color: var(--text-2);         background: var(--bg-2); }
+  .panel-head.mint  { color: var(--mint);           background: var(--mint-pale); }
   .panel-body { padding: .72rem .88rem; }
 
   /* ── SIDEBAR ROOTS ── */
   .root-pill {
+    padding: .36rem .62rem; border-radius: 7px; cursor: pointer;
+    font-family: 'Scheherazade New', serif; font-size: 1.04rem;
+    color: var(--text-3); transition: all .13s; direction: rtl;
     display: flex; align-items: center; justify-content: space-between;
-    padding: .36rem .62rem; border-radius: 8px; cursor: pointer;
-    transition: all .14s; font-family: 'Amiri', serif;
-    font-size: 1.06rem; direction: rtl;
+    border: 1px solid transparent;
   }
-  .root-pill:hover   { background: var(--teal-pale); color: var(--teal); }
-  .root-pill.selected { background: var(--teal); color: #fff; }
-  .scroll-box { max-height: 250px; overflow-y: auto; }
-  .scroll-box::-webkit-scrollbar { width: 4px; }
-  .scroll-box::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+  .root-pill:hover { background: var(--bg-3); color: var(--text-2); border-color: var(--line-2); }
+  .root-pill.selected { background: var(--sage-pale); color: var(--sage-bright); border-color: rgba(92,138,110,.3); }
+  .scroll-box { max-height: 265px; overflow-y: auto; }
+  .scroll-box::-webkit-scrollbar { width: 3px; }
+  .scroll-box::-webkit-scrollbar-thumb { background: var(--line-3); border-radius: 2px; }
 
   /* ── VIEWS ── */
   .view { display: none; }
-  .view.active { display: block; animation: fadeUp .27s ease; }
+  .view.active { display: block; animation: fadeUp .22s ease; }
 
   /* ── DICT ENTRY ── */
   .dict-entry-header {
-    background: linear-gradient(135deg, var(--ink) 0%, #2e1a06 100%);
-    border-radius: 14px 14px 0 0; padding: 1.7rem 2rem 1.3rem;
-    text-align: center; color: var(--gold-pale); position: relative; overflow: hidden;
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 11px 11px 0 0; padding: 1.8rem 2rem 1.4rem;
+    text-align: center; position: relative; overflow: hidden;
   }
   .dict-entry-header::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(184,134,11,.15), transparent 70%);
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--sage), var(--sand), var(--sage), transparent);
   }
   .dict-root-big {
-    font-family: 'Amiri', serif; font-size: clamp(2.8rem, 6vw, 4.5rem);
-    font-weight: 700; line-height: 1; color: #fff;
-    text-shadow: 0 3px 20px rgba(184,134,11,.5); position: relative;
+    font-family: 'Scheherazade New', serif;
+    font-size: clamp(3rem, 6vw, 4.8rem); font-weight: 700;
+    color: var(--white); line-height: 1; position: relative;
   }
-  .dict-root-big .dash { color: var(--gold-light); font-size: 60%; vertical-align: middle; }
-  .dict-root-subtitle { font-size: .8rem; color: var(--gold-pale); opacity: .6; margin-top: .32rem; position: relative; }
-  .dict-root-tags { display: flex; gap: .38rem; justify-content: center; margin-top: .65rem; position: relative; flex-wrap: wrap; }
-  .tag { display: inline-block; border-radius: 20px; padding: .16rem .72rem; font-size: .72rem; font-weight: 700; }
-  .tag-gold  { background: var(--gold);       color: #fff; }
-  .tag-teal  { background: var(--teal-light); color: #fff; }
-  .dict-body { padding: 1.3rem; }
-  .dict-section-title {
-    font-family: 'Amiri', serif; font-size: 1.08rem; font-weight: 700;
-    color: var(--teal); margin-bottom: .72rem;
-    padding-bottom: .32rem; border-bottom: 2px solid var(--teal-pale);
-    display: flex; align-items: center; gap: .42rem;
+  .dict-root-big .sep { color: var(--sage); font-size: 52%; vertical-align: middle; opacity: .7; }
+  .dict-root-subtitle { font-size: .72rem; color: var(--text-3); margin-top: .38rem; letter-spacing: .1em; }
+  .dict-root-tags { display: flex; gap: .38rem; justify-content: center; margin-top: .75rem; flex-wrap: wrap; }
+  .tag {
+    display: inline-block; border-radius: 5px;
+    padding: .16rem .72rem; font-size: .65rem; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase;
+  }
+  .tag-sage { background: var(--sage-pale);  color: var(--sage-bright); border: 1px solid rgba(92,138,110,.3); }
+  .tag-sand { background: var(--sand-pale);  color: var(--sand);        border: 1px solid rgba(201,169,110,.3); }
+  .tag-mint { background: var(--mint-pale);  color: var(--mint);        border: 1px solid rgba(90,158,128,.3); }
+
+  .dict-body {
+    padding: 1.3rem; background: var(--bg-1);
+    border: 1px solid var(--line); border-top: none;
+    border-radius: 0 0 11px 11px;
+  }
+
+  .section-title {
+    font-size: .67rem; font-weight: 700; color: var(--text-3);
+    letter-spacing: .1em; text-transform: uppercase;
+    display: flex; align-items: center; gap: .48rem;
+    margin-bottom: .82rem; padding-bottom: .48rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-title .st-dot {
+    width: 6px; height: 6px; background: var(--sage);
+    border-radius: 50%; flex-shrink: 0;
   }
 
   /* ── SCHEME CARDS ── */
-  .scheme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: .72rem; }
+  .scheme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: .65rem; }
   .scheme-card {
-    background: var(--parchment); border: 1.5px solid var(--parchment-dk);
-    border-radius: 10px; padding: .82rem .92rem;
-    direction: rtl; transition: all .2s; cursor: pointer; position: relative;
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 9px; padding: .82rem .92rem;
+    direction: rtl; transition: all .18s; cursor: pointer; position: relative; overflow: hidden;
   }
-  .scheme-card:hover { border-color: var(--teal); background: var(--teal-pale); transform: translateY(-2px); box-shadow: 0 6px 20px var(--shadow); }
-  .scheme-card .sc-word    { font-family: 'Amiri', serif; font-size: 1.42rem; font-weight: 700; color: var(--teal); display: block; }
-  .scheme-card .sc-pattern { font-family: 'Amiri', serif; font-size: .8rem; color: var(--gold); margin-top: .1rem; display: block; }
-  .scheme-card .sc-def     { font-size: .68rem; color: #666; margin-top: .35rem; line-height: 1.4; border-top: 1px solid var(--parchment-dk); padding-top: .35rem; }
-  .scheme-card .sc-badge   { position: absolute; top: .42rem; left: .42rem; font-size: .58rem; background: var(--teal); color: #fff; border-radius: 10px; padding: .07rem .4rem; }
+  .scheme-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--sage); transform: scaleX(0); transition: transform .2s;
+    transform-origin: right;
+  }
+  .scheme-card:hover { border-color: var(--line-3); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+  .scheme-card:hover::after { transform: scaleX(1); }
+  .scheme-card .sc-word    { font-family: 'Scheherazade New', serif; font-size: 1.5rem; font-weight: 700; color: var(--sage-bright); display: block; }
+  .scheme-card .sc-pattern { font-size: .7rem; color: var(--sand); margin-top: .1rem; display: block; font-weight: 700; letter-spacing: .04em; }
+  .scheme-card .sc-def     { font-size: .65rem; color: var(--text-3); margin-top: .36rem; line-height: 1.5; padding-top: .36rem; border-top: 1px solid var(--line); }
+  .scheme-card .sc-badge   {
+    position: absolute; top: .42rem; left: .42rem;
+    font-size: .54rem; background: var(--sand-pale); color: var(--sand);
+    border: 1px solid rgba(201,169,110,.3); border-radius: 4px;
+    padding: .06rem .4rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  }
 
   /* ── VALIDATION ── */
-  .val-result-yes { font-family: 'Amiri', serif; font-size: 2.7rem; font-weight: 700; color: var(--green); text-align: center; }
-  .val-result-no  { font-family: 'Amiri', serif; font-size: 2.7rem; font-weight: 700; color: var(--red);   text-align: center; }
+  .val-big { font-family: 'Scheherazade New', serif; font-size: 2.8rem; font-weight: 700; text-align: center; }
+  .val-big.yes { color: var(--mint); }
+  .val-big.no  { color: var(--rose); }
 
-  /* ── SIDEBAR RIGHT ── */
-  .pat-item {
-    display: flex; align-items: flex-start; gap: .45rem;
-    padding: .42rem .52rem; border-radius: 8px; cursor: pointer;
-    transition: all .14s; direction: rtl; border-bottom: 1px solid var(--parchment-dk);
-  }
+  /* ── PAT SIDEBAR ── */
+  .pat-item { padding: .4rem .52rem; border-radius: 7px; cursor: pointer; transition: all .13s; direction: rtl; border-bottom: 1px solid var(--line); }
   .pat-item:last-child { border-bottom: none; }
-  .pat-item:hover { background: var(--gold-pale); }
-  .pat-item .pi-name { font-family: 'Amiri', serif; font-size: 1.08rem; font-weight: 700; color: var(--teal); }
-  .pat-item .pi-def  { font-size: .66rem; color: #777; line-height: 1.32; margin-top: .07rem; }
+  .pat-item:hover { background: var(--bg-2); }
+  .pat-item .pi-name { font-family: 'Scheherazade New', serif; font-size: 1.04rem; font-weight: 700; color: var(--sand); }
+  .pat-item .pi-def  { font-size: .62rem; color: var(--text-3); margin-top: .04rem; line-height: 1.35; }
 
   /* ── FORMS ── */
-  .form-group { margin-bottom: .78rem; }
+  .form-group { margin-bottom: .8rem; }
   label.fl {
-    display: block; font-size: .72rem; font-weight: 700; color: var(--teal);
-    text-transform: uppercase; letter-spacing: .05em; margin-bottom: .26rem;
+    display: block; font-size: .65rem; font-weight: 700;
+    color: var(--text-3); text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: .28rem;
   }
   input[type="text"], select {
-    width: 100%; padding: .48rem .82rem; border: 2px solid var(--parchment-dk);
-    border-radius: 8px; background: var(--parchment); font-family: 'Amiri', serif;
-    font-size: 1rem; color: var(--ink); direction: rtl; outline: none;
-    transition: border-color .2s, box-shadow .2s;
+    width: 100%; padding: .5rem .85rem;
+    border: 1px solid var(--line-2); border-radius: 7px;
+    background: var(--bg-2); font-family: 'Scheherazade New', serif;
+    font-size: 1rem; color: var(--text); direction: rtl; outline: none;
+    transition: border-color .18s;
   }
-  input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(23,82,79,.12); background: #fff; }
-  .hint { font-size: .68rem; color: #999; margin-top: .16rem; }
+  input:focus, select:focus { border-color: var(--sage); }
+  .hint { font-size: .62rem; color: var(--text-4); margin-top: .16rem; }
+  select option { background: var(--bg-2); }
 
   /* ── BUTTONS ── */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: .36rem;
-    padding: .48rem 1.2rem; border: none; border-radius: 8px; cursor: pointer;
-    font-family: 'Tajawal', sans-serif; font-size: .85rem; font-weight: 700; transition: all .17s;
+    padding: .5rem 1.2rem; border: none; border-radius: 7px;
+    cursor: pointer; font-family: 'Cairo', sans-serif;
+    font-size: .8rem; font-weight: 700; transition: all .16s; letter-spacing: .02em;
   }
-  .btn-teal  { background: linear-gradient(135deg, var(--teal), var(--teal-light)); color: #fff; box-shadow: 0 2px 8px rgba(23,82,79,.3); }
-  .btn-gold  { background: linear-gradient(135deg, var(--copper), var(--gold-light)); color: #fff; box-shadow: 0 2px 8px rgba(184,134,11,.3); }
-  .btn-red   { background: linear-gradient(135deg, var(--red), #b83232); color: #fff; }
-  .btn-ghost { background: var(--parchment); color: var(--ink); border: 1.5px solid var(--parchment-dk); }
-  .btn:hover  { transform: translateY(-1px); filter: brightness(1.07); }
-  .btn:active { transform: translateY(0); }
+  .btn-sage  {
+    background: var(--sage); color: #fff;
+  }
+  .btn-sage:hover  { background: var(--sage-bright); }
+  .btn-sand  { background: var(--sand); color: var(--bg); }
+  .btn-sand:hover  { background: var(--sand-bright); }
+  .btn-rose  { background: var(--rose-pale); color: var(--rose); border: 1px solid rgba(192,97,107,.3); }
+  .btn-rose:hover  { background: var(--rose-glow); }
+  .btn-ghost {
+    background: transparent; color: var(--text-3);
+    border: 1px solid var(--line-2);
+  }
+  .btn-ghost:hover { background: var(--bg-2); color: var(--text-2); border-color: var(--line-3); }
+  .btn:active { transform: scale(.97); }
   .btn-full { width: 100%; }
-  .btn-sm   { padding: .26rem .68rem; font-size: .74rem; }
-  .btn-group { display: flex; gap: .42rem; flex-wrap: wrap; }
+  .btn-sm   { padding: .28rem .72rem; font-size: .72rem; }
+  .btn-group { display: flex; gap: .38rem; flex-wrap: wrap; }
 
   /* ── RESULT BOXES ── */
   .rbox {
-    border-radius: 10px; padding: .82rem .95rem; margin-top: .7rem;
-    border-right: 4px solid var(--teal); background: var(--teal-pale);
-    font-size: .88rem; direction: rtl; animation: fadeUp .22s ease;
+    border-radius: 8px; padding: .82rem .95rem; margin-top: .72rem;
+    font-size: .84rem; direction: rtl; animation: fadeUp .2s ease;
+    border: 1px solid;
   }
-  .rbox.err  { border-color: var(--red);   background: #fde8e8; }
-  .rbox.ok   { border-color: var(--green);  background: var(--green-pale); }
-  .rbox.warn { border-color: var(--gold);   background: var(--gold-pale); }
+  .rbox      { background: var(--sage-pale);  border-color: rgba(92,138,110,.25); color: var(--sage-bright); }
+  .rbox.err  { background: var(--rose-pale);  border-color: rgba(192,97,107,.25); color: var(--rose); }
+  .rbox.ok   { background: var(--mint-pale);  border-color: rgba(90,158,128,.25); color: var(--mint); }
+  .rbox.warn { background: var(--sand-pale);  border-color: rgba(201,169,110,.25); color: var(--sand); }
 
-  /* ── CHECKBOX GRID ── */
+  /* ── CHECK GRID ── */
   .check-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: .26rem;
-    max-height: 205px; overflow-y: auto;
-    border: 1px solid var(--parchment-dk); border-radius: 8px;
-    padding: .52rem; background: var(--parchment);
+    display: grid; grid-template-columns: 1fr 1fr; gap: .22rem;
+    max-height: 208px; overflow-y: auto;
+    border: 1px solid var(--line); border-radius: 7px;
+    padding: .5rem; background: var(--bg-2);
   }
   .check-grid label {
-    display: flex; align-items: center; gap: .36rem;
-    font-family: 'Amiri', serif; font-size: .96rem; cursor: pointer;
-    padding: .1rem .26rem; border-radius: 5px; transition: background .1s; direction: rtl;
+    display: flex; align-items: center; gap: .35rem;
+    font-family: 'Scheherazade New', serif; font-size: .95rem;
+    cursor: pointer; padding: .1rem .28rem; border-radius: 5px;
+    transition: background .1s; direction: rtl; color: var(--text-3);
   }
-  .check-grid label:hover { background: var(--gold-pale); }
-  .check-grid input[type="checkbox"] { accent-color: var(--teal); width: 13px; height: 13px; }
+  .check-grid label:hover { background: var(--bg-3); color: var(--text-2); }
+  .check-grid input[type="checkbox"] { accent-color: var(--sage); width: 13px; height: 13px; }
 
   /* ── FAMILY GRID ── */
-  .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .58rem; }
+  .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: .52rem; }
   .fam-item {
-    background: var(--parchment); border: 1.5px solid var(--parchment-dk);
-    border-radius: 10px; padding: .62rem .82rem;
-    text-align: center; direction: rtl; cursor: pointer; transition: all .14s;
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 9px; padding: .62rem .82rem;
+    text-align: center; direction: rtl; cursor: pointer; transition: all .15s;
+    position: relative; overflow: hidden;
   }
-  .fam-item:hover { border-color: var(--teal); background: var(--teal-pale); transform: translateY(-2px); }
-  .fam-item .fi-word    { font-family: 'Amiri', serif; font-size: 1.32rem; color: var(--teal); font-weight: 700; display: block; }
-  .fam-item .fi-pattern { font-size: .66rem; color: #888; font-family: 'Amiri', serif; margin-top: .16rem; display: block; }
-  .fam-item .fi-def     { font-size: .61rem; color: #aaa; margin-top: .16rem; line-height: 1.3; }
+  .fam-item:hover { border-color: var(--line-3); transform: translateY(-2px); box-shadow: 0 5px 16px rgba(0,0,0,.3); }
+  .fam-item .fi-word    { font-family: 'Scheherazade New', serif; font-size: 1.32rem; color: var(--sage-bright); font-weight: 700; display: block; }
+  .fam-item .fi-pattern { font-size: .61rem; color: var(--sand); margin-top: .14rem; display: block; font-weight: 700; letter-spacing: .04em; }
+  .fam-item .fi-def     { font-size: .59rem; color: var(--text-4); margin-top: .14rem; line-height: 1.35; }
 
-  /* ── EXPLORER HERO ── */
+  /* ── EXPLORER ── */
   .exp-hero {
-    text-align: center; padding: 1.4rem 1rem .95rem;
-    background: linear-gradient(135deg, var(--ink), #2e1a06);
-    border-radius: 12px; margin-bottom: 1.1rem; color: var(--gold-pale);
+    text-align: center; padding: 1.5rem 1rem 1rem;
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 10px; margin-bottom: 1rem; position: relative; overflow: hidden;
+  }
+  .exp-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--sage), var(--sand), transparent);
   }
   .exp-hero .root-display {
-    font-family: 'Amiri', serif; font-size: clamp(2.8rem, 5.5vw, 4.2rem);
-    font-weight: 700; color: #fff; line-height: 1;
+    font-family: 'Scheherazade New', serif;
+    font-size: clamp(2.8rem, 5.5vw, 4.5rem); font-weight: 700;
+    color: var(--white); line-height: 1;
   }
-  .exp-hero .root-display .sep { color: var(--gold-light); font-size: 60%; vertical-align: middle; }
-  .exp-hero .root-count { color: var(--gold-pale); opacity: .62; font-size: .83rem; margin-top: .38rem; }
+  .exp-hero .root-display .sep { color: var(--sage); font-size: 52%; vertical-align: middle; opacity: .7; }
+  .exp-hero .root-count { color: var(--text-3); font-size: .78rem; margin-top: .38rem; letter-spacing: .06em; }
 
-  /* ── DIVIDER ── */
-  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: .88rem 0; }
+  /* ── MANAGE labels ── */
+  .mgmt-label {
+    font-size: .65rem; font-weight: 700; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: .68rem; display: flex; align-items: center; gap: .4rem;
+  }
+  .mgmt-label::before { content: ''; width: 3px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+  .mgmt-label.s::before { background: var(--sage); }
+  .mgmt-label.a::before { background: var(--sand); }
+
+  .divider { height: 1px; background: var(--line); margin: .95rem 0; }
+
+  /* ── FEATURED CARD ── */
+  .feat-card {
+    background: var(--bg-1); border: 1px solid var(--line);
+    border-radius: 11px; margin-bottom: .8rem; overflow: hidden;
+  }
+  .feat-card-head {
+    background: var(--bg-2); padding: .62rem 1.05rem;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; border-bottom: 1px solid var(--line);
+    position: relative; overflow: hidden;
+  }
+  .feat-card-head::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
+    background: linear-gradient(90deg, var(--sage), var(--sand));
+  }
+  .feat-root-label {
+    font-family: 'Scheherazade New', serif; font-size: 1.65rem; color: var(--white);
+  }
+  .feat-root-label .sep { color: var(--sage); font-size: .85rem; opacity: .6; }
 
   /* ── EMPTY ── */
-  .empty { text-align: center; padding: 1.8rem 1rem; color: #bbb; }
-  .empty .ei { font-size: 2.3rem; display: block; margin-bottom: .38rem; }
-  .empty p { font-family: 'Amiri', serif; font-size: .98rem; }
+  .empty { text-align: center; padding: 2rem 1rem; color: var(--text-4); }
+  .empty .ei { font-size: 2.2rem; display: block; margin-bottom: .5rem; opacity: .3; }
+  .empty p { font-size: .86rem; }
 
   /* ── TOAST ── */
   .toast {
     position: fixed; bottom: 2rem; left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: var(--ink); color: var(--gold-pale);
-    padding: .52rem 1.35rem; border-radius: 30px; font-size: .84rem;
-    border: 1px solid var(--gold); z-index: 9999;
-    transition: transform .28s; pointer-events: none; font-family: 'Amiri', serif;
+    background: var(--bg-3); color: var(--text);
+    padding: .52rem 1.4rem; border-radius: 7px; font-size: .82rem;
+    border: 1px solid var(--sage);
+    z-index: 9999; transition: transform .26s; pointer-events: none;
+    font-family: 'Scheherazade New', serif;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp { from { opacity:0; transform:translateY(9px); } to { opacity:1; transform:translateY(0); } }
-
   /* ── RESPONSIVE ── */
-  @media (max-width: 1080px) {
-    .page-body { grid-template-columns: 240px 1fr; }
-    .right-panel { display: none; }
-  }
-  @media (max-width: 680px) {
-    .page-body { grid-template-columns: 1fr; }
-    .left-panel { display: none; }
-  }
+  @media (max-width: 1100px) { .page-body { grid-template-columns: 230px 1fr; } .right-panel { display: none; } }
+  @media (max-width: 680px)  { .page-body { grid-template-columns: 1fr; } .left-panel { display: none; } }
 </style>
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
 <div id="loading-screen">
-  <div class="ls-title">محرك الاشتقاق العربي</div>
-  <div class="spinner"></div>
-  <div class="ls-sub">جارٍ تحميل الجذور والأوزان من الملفات…</div>
+  <div class="ls-monogram">م · ش · ق</div>
+  <div class="ls-bar"></div>
+  <div class="ls-label">تحميل المحرك الصرفي</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -336,33 +545,43 @@
 <!-- HEADER -->
 <header>
   <div class="header-inner">
-    <div class="header-logo">
-      <div class="title-ar">محرك الاشتقاق والبحث المورفولوجي</div>
-      <div class="title-fr">Moteur de Recherche Morphologique &amp; Générateur de Dérivation Arabe · ISI 1ING 2025–2026</div>
+    <div class="header-brand">
+      <div class="brand-icon">م</div>
+      <div class="brand-text">
+        <div class="title-ar">محرك الاشتقاق والبحث المورفولوجي</div>
+        <div class="title-fr">Moteur de Recherche Morphologique · ISI 1ING 2025–2026</div>
+      </div>
     </div>
-    <div class="header-badges">
-      <div class="hbadge"><strong id="stat-roots">–</strong>جذر</div>
-      <div class="hbadge"><strong id="stat-patterns">–</strong>وزن</div>
+    <div style="display:flex;align-items:center;gap:.85rem;">
+      <div class="header-stats">
+        <div class="stat-chip"><span class="sc-val" id="stat-roots">–</span><span class="sc-lbl">جذر</span></div>
+        <div class="stat-chip"><span class="sc-val" id="stat-patterns">–</span><span class="sc-lbl">وزن</span></div>
+      </div>
+      <div class="theme-toggle-wrap">
+        <span class="theme-icon" id="theme-icon-dark">🌙</span>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="تبديل المظهر"></button>
+        <span class="theme-icon" id="theme-icon-light">☀️</span>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- SEARCH + TABS -->
+<!-- SEARCH + NAV -->
 <div class="search-section">
   <div class="search-inner">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
+    <div class="search-row">
+      <span class="search-ico">⌕</span>
       <input type="text" id="global-search" placeholder="ابحث عن جذر أو وزن…" autocomplete="off"
              onkeydown="if(event.key==='Enter') globalSearch(this.value)">
-      <button class="btn btn-gold btn-sm" onclick="globalSearch(document.getElementById('global-search').value)">بحث</button>
+      <button class="btn btn-sage btn-sm" onclick="globalSearch(document.getElementById('global-search').value)">بحث</button>
     </div>
-    <div class="search-tabs">
-      <button class="stab active"  data-view="dict"     onclick="switchView(this)">📖 القاموس</button>
-      <button class="stab"         data-view="generate"  onclick="switchView(this)">⚙️ توليد انتقائي</button>
-      <button class="stab"         data-view="validate"  onclick="switchView(this)">✅ تحقق</button>
-      <button class="stab"         data-view="explorer"  onclick="switchView(this)">🗺️ استكشاف العائلة</button>
-      <button class="stab"         data-view="manage"    onclick="switchView(this)">🛠️ إدارة</button>
-      <button class="stab"         data-view="schemes"   onclick="switchView(this)">📐 موسوعة الأوزان</button>
+    <div class="nav-tabs">
+      <button class="stab active" data-view="dict"    onclick="switchView(this)">📖 القاموس</button>
+      <button class="stab"        data-view="generate" onclick="switchView(this)">⚡ توليد انتقائي</button>
+      <button class="stab"        data-view="validate" onclick="switchView(this)">✓ تحقق</button>
+      <button class="stab"        data-view="explorer" onclick="switchView(this)">◎ استكشاف العائلة</button>
+      <button class="stab"        data-view="manage"   onclick="switchView(this)">⚙ إدارة</button>
+      <button class="stab"        data-view="schemes"  onclick="switchView(this)">▦ موسوعة الأوزان</button>
     </div>
   </div>
 </div>
@@ -370,24 +589,15 @@
 <!-- PAGE BODY -->
 <div class="page-body">
 
-  <!-- LEFT SIDEBAR -->
+  <!-- LEFT -->
   <aside class="left-panel">
-    <div class="panel" style="margin-bottom:.9rem;">
-      <div class="panel-head teal">🌳 الجذور</div>
-      <div class="panel-body" style="padding:.42rem .6rem;">
+    <div class="panel">
+      <div class="panel-head sage">◉ الجذور</div>
+      <div class="panel-body" style="padding:.42rem .58rem;">
         <input type="text" id="root-filter" placeholder="تصفية…"
                oninput="renderRootSidebar(this.value)"
-               style="margin-bottom:.42rem;font-size:.86rem;padding:.3rem .6rem;">
+               style="margin-bottom:.42rem;font-size:.83rem;padding:.3rem .6rem;">
         <div class="scroll-box" id="root-sidebar"></div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-head gold">➕ إضافة جذر سريع</div>
-      <div class="panel-body">
-        <input type="text" id="quick-add-root" placeholder="ك-ت-ب" style="margin-bottom:.42rem;"
-               onkeydown="if(event.key==='Enter') quickAddRoot()">
-        <button class="btn btn-gold btn-full btn-sm" onclick="quickAddRoot()">إضافة</button>
-        <div id="qar-msg"></div>
       </div>
     </div>
   </aside>
@@ -398,31 +608,28 @@
     <!-- DICTIONARY -->
     <div class="view active" id="view-dict">
       <div id="dict-home">
-        <div style="padding:1.1rem 0 .75rem;text-align:center;font-family:'Amiri',serif;font-size:.98rem;color:#999;">
-          اختر جذرًا من القائمة أو ابحث عنه
-        </div>
+        <div style="text-align:center;padding:1.1rem 0 .75rem;font-size:.83rem;color:var(--text-4);letter-spacing:.05em;">اختر جذرًا من القائمة أو ابحث عنه</div>
         <div id="dict-featured"></div>
       </div>
       <div id="dict-entry" style="display:none;"></div>
     </div>
 
-    <!-- GENERATE (selective only — no "full family" button here) -->
+    <!-- GENERATE -->
     <div class="view" id="view-generate">
       <div class="panel">
-        <div class="panel-head teal">⚙️ توليد انتقائي للمشتقات</div>
+        <div class="panel-head sage">⚡ توليد انتقائي للمشتقات</div>
         <div class="panel-body">
           <div class="form-group">
             <label class="fl">الجذر الثلاثي</label>
-            <input type="text" id="gen-root" placeholder="ك-ت-ب"
-                   onkeydown="if(event.key==='Enter') doGenSelected()">
+            <input type="text" id="gen-root" placeholder="ك-ت-ب" onkeydown="if(event.key==='Enter') doGenSelected()">
             <div class="hint">صيغة: حرف-حرف-حرف</div>
           </div>
           <div class="form-group">
             <label class="fl">اختر الأوزان المطلوبة</label>
             <div class="check-grid" id="gen-patterns"></div>
           </div>
-          <div class="btn-group" style="margin-top:.48rem;">
-            <button class="btn btn-teal" onclick="doGenSelected()">⚡ توليد</button>
+          <div class="btn-group" style="margin-top:.52rem;">
+            <button class="btn btn-sage" onclick="doGenSelected()">⚡ توليد</button>
             <button class="btn btn-ghost btn-sm" onclick="checkAll()">☑ الكل</button>
             <button class="btn btn-ghost btn-sm" onclick="uncheckAll()">☐ إلغاء</button>
           </div>
@@ -434,7 +641,7 @@
     <!-- VALIDATE -->
     <div class="view" id="view-validate">
       <div class="panel">
-        <div class="panel-head green">✅ التحقق المورفولوجي</div>
+        <div class="panel-head mint">✓ التحقق المورفولوجي</div>
         <div class="panel-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.95rem;">
             <div class="form-group">
@@ -443,27 +650,26 @@
             </div>
             <div class="form-group">
               <label class="fl">الكلمة المراد فحصها</label>
-              <input type="text" id="val-word" placeholder="مكتوب"
-                     onkeydown="if(event.key==='Enter') doValidate()">
+              <input type="text" id="val-word" placeholder="مكتوب" onkeydown="if(event.key==='Enter') doValidate()">
             </div>
           </div>
-          <button class="btn btn-teal btn-full" onclick="doValidate()">🔎 تحقق الآن</button>
+          <button class="btn btn-sage btn-full" onclick="doValidate()">تحقق الآن</button>
           <div id="val-result"></div>
         </div>
       </div>
     </div>
 
-    <!-- EXPLORER (this is the only place full family generation lives) -->
+    <!-- EXPLORER -->
     <div class="view" id="view-explorer">
       <div class="panel">
-        <div class="panel-head gold">🗺️ استكشاف العائلة اللغوية الكاملة</div>
+        <div class="panel-head sand">◎ استكشاف العائلة اللغوية الكاملة</div>
         <div class="panel-body">
-          <div style="display:flex;gap:.65rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:.45rem;">
+          <div style="display:flex;gap:.62rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:.48rem;">
             <div class="form-group" style="flex:1;margin-bottom:0;">
               <label class="fl">اختر الجذر</label>
               <select id="exp-root"></select>
             </div>
-            <button class="btn btn-gold" onclick="doExplore()">🌿 استكشف جميع المشتقات</button>
+            <button class="btn btn-sand" onclick="doExplore()">◎ استكشف جميع المشتقات</button>
           </div>
           <div id="exp-result"></div>
         </div>
@@ -473,68 +679,59 @@
     <!-- MANAGE -->
     <div class="view" id="view-manage">
       <div class="panel">
-        <div class="panel-head dark">🛠️ إدارة الجذور والأوزان</div>
+        <div class="panel-head muted">⚙ إدارة الجذور والأوزان</div>
         <div class="panel-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.15rem;">
-
-            <!-- ROOTS -->
             <div>
-              <div class="dict-section-title" style="font-size:.92rem;">🌳 الجذور</div>
+              <div class="mgmt-label s">الجذور</div>
               <div class="form-group">
                 <label class="fl">إضافة جذر</label>
-                <input type="text" id="mgmt-add-root" placeholder="ك-ت-ب"
-                       onkeydown="if(event.key==='Enter') mgmtAddRoot()">
+                <input type="text" id="mgmt-add-root" placeholder="ك-ت-ب" onkeydown="if(event.key==='Enter') mgmtAddRoot()">
               </div>
-              <button class="btn btn-teal btn-full" onclick="mgmtAddRoot()" style="margin-bottom:.65rem;">➕ إضافة</button>
+              <button class="btn btn-sage btn-full" onclick="mgmtAddRoot()" style="margin-bottom:.62rem;">إضافة</button>
               <div class="form-group">
                 <label class="fl">حذف جذر</label>
                 <input type="text" id="mgmt-del-root" placeholder="ك-ت-ب">
               </div>
-              <button class="btn btn-red btn-full" onclick="mgmtDelRoot()" style="margin-bottom:.65rem;">🗑 حذف</button>
+              <button class="btn btn-rose btn-full" onclick="mgmtDelRoot()" style="margin-bottom:.62rem;">حذف</button>
               <div class="form-group">
                 <label class="fl">بحث عن جذر</label>
-                <input type="text" id="mgmt-search-root" placeholder="ك-ت-ب"
-                       onkeydown="if(event.key==='Enter') mgmtSearchRoot()">
+                <input type="text" id="mgmt-search-root" placeholder="ك-ت-ب" onkeydown="if(event.key==='Enter') mgmtSearchRoot()">
               </div>
-              <button class="btn btn-ghost btn-full" onclick="mgmtSearchRoot()">🔍 بحث</button>
-              <div id="mgmt-root-msg" style="margin-top:.45rem;"></div>
+              <button class="btn btn-ghost btn-full" onclick="mgmtSearchRoot()">بحث</button>
+              <div id="mgmt-root-msg" style="margin-top:.48rem;"></div>
             </div>
-
-            <!-- PATTERNS -->
             <div>
-              <div class="dict-section-title" style="font-size:.92rem;">📐 الأوزان</div>
+              <div class="mgmt-label a">الأوزان</div>
               <div class="form-group">
                 <label class="fl">إضافة وزن</label>
-                <input type="text" id="mgmt-add-pat" placeholder="مفاعلة"
-                       onkeydown="if(event.key==='Enter') mgmtAddPat()">
+                <input type="text" id="mgmt-add-pat" placeholder="مفاعلة" onkeydown="if(event.key==='Enter') mgmtAddPat()">
               </div>
-              <button class="btn btn-teal btn-full" onclick="mgmtAddPat()" style="margin-bottom:.65rem;">➕ إضافة</button>
+              <button class="btn btn-sand btn-full" onclick="mgmtAddPat()" style="margin-bottom:.62rem;">إضافة</button>
               <div class="form-group">
                 <label class="fl">حذف وزن</label>
                 <input type="text" id="mgmt-del-pat" placeholder="مفعال">
               </div>
-              <button class="btn btn-red btn-full" onclick="mgmtDelPat()">🗑 حذف</button>
-              <div id="mgmt-pat-msg" style="margin-top:.45rem;"></div>
+              <button class="btn btn-rose btn-full" onclick="mgmtDelPat()">حذف</button>
+              <div id="mgmt-pat-msg" style="margin-top:.48rem;"></div>
             </div>
           </div>
-
           <div class="divider"></div>
-          <div class="dict-section-title" style="font-size:.9rem;">كل الجذور في الشجرة الثنائية</div>
-          <div id="mgmt-all-roots" style="display:flex;flex-wrap:wrap;gap:.28rem;"></div>
+          <div class="section-title"><span class="st-dot"></span>كل الجذور في الشجرة الثنائية</div>
+          <div id="mgmt-all-roots" style="display:flex;flex-wrap:wrap;gap:.26rem;margin-bottom:.5rem;"></div>
           <div class="divider"></div>
-          <div class="dict-section-title" style="font-size:.9rem;">كل الأوزان في جدول التجزئة</div>
-          <div id="mgmt-all-pats"  style="display:flex;flex-wrap:wrap;gap:.28rem;"></div>
+          <div class="section-title"><span class="st-dot" style="background:var(--sand);"></span>كل الأوزان في جدول التجزئة</div>
+          <div id="mgmt-all-pats" style="display:flex;flex-wrap:wrap;gap:.26rem;"></div>
         </div>
       </div>
     </div>
 
-    <!-- SCHEMES ENCYCLOPEDIA -->
+    <!-- SCHEMES -->
     <div class="view" id="view-schemes">
       <div class="panel">
-        <div class="panel-head gold">📐 موسوعة الأوزان الصرفية</div>
+        <div class="panel-head sand">▦ موسوعة الأوزان الصرفية</div>
         <div class="panel-body">
-          <input type="text" id="scheme-filter" placeholder="ابحث في الأوزان…"
-                 oninput="renderSchemesGrid(this.value)" style="margin-bottom:.88rem;">
+          <input type="text" id="scheme-filter" placeholder="ابحث في الأوزان…" oninput="renderSchemesGrid(this.value)" style="margin-bottom:.88rem;">
           <div id="schemes-grid"></div>
         </div>
       </div>
@@ -542,12 +739,12 @@
 
   </main>
 
-  <!-- RIGHT SIDEBAR — PATTERNS -->
+  <!-- RIGHT -->
   <aside class="right-panel">
     <div class="panel">
-      <div class="panel-head gold">📐 الأوزان الصرفية</div>
+      <div class="panel-head sand">▦ الأوزان الصرفية</div>
       <div class="panel-body" style="padding:.36rem .52rem;">
-        <div class="scroll-box" style="max-height:570px;" id="pat-sidebar"></div>
+        <div class="scroll-box" style="max-height:580px;" id="pat-sidebar"></div>
       </div>
     </div>
   </aside>
@@ -555,515 +752,318 @@
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════════
-   ARABIC MORPHOLOGICAL ENGINE — JS Implementation
-   Reads roots from ../Data/roots.txt & ../Data/patterns.txt
-   ══════════════════════════════════════════════════════════ */
-
-// ── SCHEME DEFINITIONS ────────────────────────────────────
 const SCHEME_DEFS = {
-  'فاعل':    { cat:'اسم الفاعل',                  def:'يدل على من قام بالفعل',                              ex:['كاتب','دارس','عالم','فاهم'] },
-  'مفعول':   { cat:'اسم المفعول',                 def:'يدل على من وقع عليه الفعل',                         ex:['مكتوب','مدروس','مفهوم'] },
-  'فعّال':   { cat:'صيغة المبالغة',               def:'يدل على المبالغة والكثرة في الفعل',                 ex:['كتّاب','درّاس','علّام'] },
-  'مفعل':    { cat:'اسم المكان والزمان',           def:'يدل على مكان وقوع الفعل أو زمانه',                 ex:['مكتب','مدرسة','مجلس'] },
-  'تفعيل':   { cat:'مصدر التفعيل',                def:'مصدر الفعل المضعّف على وزن فعّل',                  ex:['تكتيب','تدريس','تعليم'] },
-  'مفاعلة':  { cat:'مصدر المفاعلة',               def:'يدل على وقوع الفعل بين طرفين بالتبادل',            ex:['مكاتبة','مدارسة','معاملة'] },
-  'مفعال':   { cat:'صيغة مبالغة',                 def:'صيغة مبالغة تدل على كثرة وقوع الفعل',              ex:['مكتاب','مقراء','مفعال'] },
-  'افتعال':  { cat:'مصدر الافتعال',               def:'مصدر الفعل المزيد بالافتعال',                      ex:['اكتتاب','اجتماع','اعتراض'] },
-  'افتعل':   { cat:'فعل الافتعال',                def:'فعل ماضٍ يدل على الاشتراك أو التكلّف',              ex:['اكتتب','اجتمع','اعترض'] },
-  'استفعال': { cat:'مصدر الاستفعال',              def:'مصدر الفعل المزيد بالاستفعال — يدل على الطلب',     ex:['استكتاب','استجلاب','استعمال'] },
-  'فعيل':    { cat:'صفة مشبهة',                   def:'يدل على صفة ثابتة في الموصوف',                     ex:['كبير','صغير','عليم','جميل'] },
-  'فعول':    { cat:'صيغة مبالغة',                 def:'تدل على المبالغة في القيام بالفعل',                 ex:['شروب','أكول','ضروب'] },
-  'أفعل':    { cat:'إفعال أو أفعل تفضيل',          def:'فعل رباعي مزيد بالهمزة، أو صيغة التفضيل',          ex:['أكرم','أعلم','أفضل'] },
-  'تفاعل':   { cat:'فعل التفاعل',                 def:'يدل على وقوع الفعل بين أكثر من فاعل',              ex:['تكاتب','تدارس','تعالم'] },
-  'انفعال':  { cat:'مصدر الانفعال',               def:'يدل على المطاوعة وقبول أثر الفعل',                 ex:['انكسار','انفتاح','انجذاب'] },
-  'مستفعل':  { cat:'اسم فاعل الاستفعال',          def:'يدل على من يطلب الفعل أو يسعى إليه',               ex:['مستكتب','مستعمل','مستجيب'] },
-  'فاعول':   { cat:'صيغة مبالغة نادرة',           def:'صيغة مبالغة على وزن فاعول',                        ex:['فاروق','جاسوس','ناموس'] },
-  'تفعّل':   { cat:'فعل التفعّل',                 def:'يدل على التكلف في الفعل أو قبوله تدريجيًا',        ex:['تكتّب','تعلّم','تأدّب'] },
-  'افعال':   { cat:'مصدر الإفعال',                def:'مصدر الفعل المزيد بالهمزة',                       ex:['إكرام','إعلام','إرسال'] },
-  'فعلان':   { cat:'صفة تدل على الاضطراب',         def:'يدل على حركة واضطراب في الموصوف',                  ex:['غضبان','عطشان','فرحان'] },
-  'فعلة':    { cat:'اسم مرة',                     def:'يدل على وقوع الفعل مرة واحدة',                    ex:['ضربة','أكلة','نظرة'] },
-  'فعيلان':  { cat:'مثنى الصفة فعيل',             def:'مثنى وزن فعيل',                                    ex:['كريمان','عليمان','جميلان'] },
-  'مفاعل':   { cat:'جمع تكسير لمفعل',             def:'جمع اسم المكان أو الزمان',                         ex:['مكاتب','مدارس','مساجد'] },
-  'مفعلة':   { cat:'اسم مكان أو مصدر هيئة',       def:'يدل على مكان وجود الشيء بكثرة',                    ex:['مكتبة','مدرسة','مزرعة'] },
-  'مفاعيل':  { cat:'جمع تكسير لمفعال',            def:'جمع التكسير لصيغة مفعال',                          ex:['مفاتيح','مصابيح','مناطيق'] },
-  'فواعل':   { cat:'جمع تكسير لفاعلة',            def:'جمع التكسير لاسم الفاعل المؤنث',                   ex:['كواتب','دوارس','خوارج'] },
-  'فواعيل':  { cat:'جمع تكسير لفاعيل',            def:'جمع التكسير لصيغ فاعيل',                           ex:['عصافير','أنابيب','عناقيد'] },
-  'فعالة':   { cat:'مصدر يدل على الحرفة',          def:'يدل على الحرفة أو المهنة',                         ex:['كتابة','خياطة','نجارة'] },
-  'تفعلة':   { cat:'مصدر التفعيل الثانوي',         def:'مصدر آخر لأفعال التفعيل يدل على التحويل',          ex:['تكملة','توصية','تجزئة'] },
+  'فاعل':    { cat:'اسم الفاعل',           def:'يدل على من قام بالفعل',                 ex:['كاتب','دارس','عالم','فاهم'] },
+  'مفعول':   { cat:'اسم المفعول',          def:'يدل على من وقع عليه الفعل',            ex:['مكتوب','مدروس','مفهوم'] },
+  'فعّال':   { cat:'صيغة المبالغة',        def:'يدل على المبالغة في الفعل',            ex:['كتّاب','درّاس','علّام'] },
+  'مفعل':    { cat:'اسم المكان والزمان',   def:'يدل على مكان وقوع الفعل أو زمانه',    ex:['مكتب','مدرسة','مجلس'] },
+  'تفعيل':   { cat:'مصدر التفعيل',         def:'مصدر الفعل المضعّف',                   ex:['تكتيب','تدريس','تعليم'] },
+  'مفاعلة':  { cat:'مصدر المفاعلة',       def:'وقوع الفعل بين طرفين',                 ex:['مكاتبة','مدارسة','معاملة'] },
+  'مفعال':   { cat:'صيغة مبالغة',          def:'تدل على كثرة وقوع الفعل',              ex:['مكتاب','مقراء','مفعال'] },
+  'افتعال':  { cat:'مصدر الافتعال',        def:'مصدر الفعل المزيد بالافتعال',          ex:['اكتتاب','اجتماع','اعتراض'] },
+  'افتعل':   { cat:'فعل الافتعال',         def:'فعل ماضٍ يدل على الاشتراك',            ex:['اكتتب','اجتمع','اعترض'] },
+  'استفعال': { cat:'مصدر الاستفعال',      def:'يدل على الطلب والاستدعاء',             ex:['استكتاب','استجلاب','استعمال'] },
+  'فعيل':    { cat:'صفة مشبهة',            def:'يدل على صفة ثابتة',                    ex:['كبير','صغير','عليم','جميل'] },
+  'فعول':    { cat:'صيغة مبالغة',          def:'تدل على المبالغة في الفعل',            ex:['شروب','أكول','ضروب'] },
+  'أفعل':    { cat:'إفعال / أفعل تفضيل',  def:'فعل رباعي مزيد بالهمزة',              ex:['أكرم','أعلم','أفضل'] },
+  'تفاعل':   { cat:'فعل التفاعل',          def:'وقوع الفعل بين أكثر من فاعل',          ex:['تكاتب','تدارس','تعالم'] },
+  'انفعال':  { cat:'مصدر الانفعال',        def:'يدل على المطاوعة',                     ex:['انكسار','انفتاح','انجذاب'] },
+  'مستفعل':  { cat:'اسم فاعل الاستفعال',  def:'يدل على من يطلب الفعل',                ex:['مستكتب','مستعمل','مستجيب'] },
+  'فاعول':   { cat:'صيغة مبالغة نادرة',   def:'صيغة مبالغة على وزن فاعول',            ex:['فاروق','جاسوس','ناموس'] },
+  'تفعّل':   { cat:'فعل التفعّل',          def:'يدل على التكلف في الفعل',              ex:['تكتّب','تعلّم','تأدّب'] },
+  'افعال':   { cat:'مصدر الإفعال',         def:'مصدر الفعل المزيد بالهمزة',           ex:['إكرام','إعلام','إرسال'] },
+  'فعلان':   { cat:'صفة الاضطراب',         def:'يدل على حركة واضطراب',                 ex:['غضبان','عطشان','فرحان'] },
+  'فعلة':    { cat:'اسم مرة',              def:'يدل على وقوع الفعل مرة واحدة',        ex:['ضربة','أكلة','نظرة'] },
+  'فعيلان':  { cat:'مثنى فعيل',            def:'مثنى وزن فعيل',                        ex:['كريمان','عليمان','جميلان'] },
+  'مفاعل':   { cat:'جمع تكسير لمفعل',     def:'جمع اسم المكان أو الزمان',             ex:['مكاتب','مدارس','مساجد'] },
+  'مفعلة':   { cat:'اسم مكان / هيئة',     def:'يدل على مكان وجود الشيء',              ex:['مكتبة','مدرسة','مزرعة'] },
+  'مفاعيل':  { cat:'جمع تكسير لمفعال',    def:'جمع التكسير لصيغة مفعال',              ex:['مفاتيح','مصابيح','مناطيق'] },
+  'فواعل':   { cat:'جمع تكسير لفاعلة',    def:'جمع التكسير لاسم الفاعل المؤنث',       ex:['كواتب','دوارس','خوارج'] },
+  'فواعيل':  { cat:'جمع تكسير لفاعيل',    def:'جمع التكسير لصيغ فاعيل',               ex:['عصافير','أنابيب','عناقيد'] },
+  'فعالة':   { cat:'مصدر الحرفة',          def:'يدل على الحرفة أو المهنة',             ex:['كتابة','خياطة','نجارة'] },
+  'تفعلة':   { cat:'مصدر التفعيل الثانوي', def:'يدل على التحويل والتكميل',             ex:['تكملة','توصية','تجزئة'] },
 };
 
-// ── NORMALIZATION ─────────────────────────────────────────
-const DIACRITICS = /[\u064B-\u065F\u0670]/g;
-const ALEF_MAP   = {'آ':'ا','أ':'ا','إ':'ا','ٱ':'ا'};
-function norm(s)    { return s.replace(DIACRITICS,'').replace(/[آأإٱ]/g, c=>ALEF_MAP[c]||c).trim(); }
-function isAr(c)    { return c >= '\u0621' && c <= '\u064A'; }
+const DIACRITICS=/[\u064B-\u065F\u0670]/g, ALEF_MAP={'آ':'ا','أ':'ا','إ':'ا','ٱ':'ا'};
+function norm(s)    { return s.replace(DIACRITICS,'').replace(/[آأإٱ]/g,c=>ALEF_MAP[c]||c).trim(); }
+function isAr(c)    { return c>='\u0621'&&c<='\u064A'; }
 function compact(d) { return norm(d).replace(/-/g,''); }
 function dashed(c)  { return c.split('').join('-'); }
 function validateRoot(raw) {
-  const n = norm(raw), l = n.replace(/-/g,'');
-  if (!l)                             return 'الجذر فارغ';
-  if (!l.split('').every(isAr))       return 'يجب أن تكون الحروف عربية فقط';
-  if (l.length !== 3)                 return 'يجب أن يحتوي الجذر على 3 حروف فقط';
-  if (n.split('-').length - 1 !== 2)  return 'الصيغة الصحيحة: حرف-حرف-حرف  (مثال: ك-ت-ب)';
+  const n=norm(raw),l=n.replace(/-/g,'');
+  if(!l) return 'الجذر فارغ';
+  if(!l.split('').every(isAr)) return 'يجب أن تكون الحروف عربية فقط';
+  if(l.length!==3) return 'يجب أن يحتوي الجذر على 3 حروف فقط';
+  if(n.split('-').length-1!==2) return 'الصيغة الصحيحة: حرف-حرف-حرف (مثال: ك-ت-ب)';
   return null;
 }
 
-// ── DATA STORE ────────────────────────────────────────────
-const roots    = {};  // compact3 -> { derived:{} }
-const patterns = {};  // normPat  -> displayForm
-
-// ── DYNAMIC LOAD ──────────────────────────────────────────
-async function fetchText(path) {
-  try { const r = await fetch(path); return r.ok ? r.text() : null; }
-  catch { return null; }
-}
+const roots={}, patterns={};
 
 async function initData() {
-  const [rootsTxt, patsTxt] = await Promise.all([
-    fetchText('../Data/roots.txt'),
-    fetchText('../Data/patterns.txt'),
-  ]);
-
-  // ── Load roots ──
-  const rootLines = rootsTxt
-    ? rootsTxt.split('\n')
-    : ['ك-ت-ب','د-ر-س','ع-ل-م','ف-ه-م','ق-ر-أ','س-م-ع','ذ-ه-ب','ج-ل-س','ح-س-ب','ع-م-ل',
-       'ف-ع-ل','ص-ن-ع','ل-ع-ب','ر-ك-ب','ش-ر-ب','أ-ك-ل','ن-ز-ل','ر-ج-ع','خ-ر-ج','د-خ-ل',
-       'ف-ت-ح','ح-م-ل','و-ج-د'];
-  rootLines.forEach(line => {
-    const r = line.trim();
-    if (r && !validateRoot(r)) { const c = compact(r); if (!roots[c]) roots[c] = { derived:{} }; }
-  });
-
-  // ── Load patterns ──
-  const patLines = patsTxt
-    ? patsTxt.split('\n')
-    : ['فاعل','مفعول','فعّال','مفعل','تفعيل','مفاعلة','مفعال','افتعال','افتعل',
-       'استفعال','فعيل','فعول','أفعل','تفاعل','انفعال','مستفعل','فاعول','تفعّل',
-       'افعال','فعلان','فعلة','فعيلان','مفاعل','مفعلة','مفاعيل','فواعل','فواعيل','فعالة','تفعلة'];
-  patLines.forEach(line => {
-    const p = line.trim();
-    if (p) { const n = norm(p); if (!patterns[n]) patterns[n] = p; }
-  });
-
-  // Dismiss loading screen
-  const ls = document.getElementById('loading-screen');
-  ls.style.opacity = '0';
-  setTimeout(() => ls.style.display = 'none', 380);
-
-  // Boot UI
-  updateStats();
-  renderAll();
-  renderGenPatterns();
-  populateExpSelect();
-  renderFeatured();
-  renderSchemesGrid('');
-}
-
-// ── ENGINE ────────────────────────────────────────────────
-function derive(rawRoot, normPat) {
-  if (validateRoot(rawRoot)) return null;
-  const parts = norm(rawRoot).split('-');
-  if (parts.length !== 3) return null;
-  const [f, a, l] = parts;
-  return normPat.split('').map(c => c==='ف'?f : c==='ع'?a : c==='ل'?l : c).join('');
-}
-
-function genFamily(rawRoot) {
-  const cmp = compact(rawRoot);
-  if (!roots[cmp]) return null;
-  return Object.keys(patterns).reduce((acc, np) => {
-    const word = derive(rawRoot, np);
-    if (word) acc.push({ np, display: patterns[np], word });
-    return acc;
-  }, []);
-}
-
-function doValidateWord(rawRoot, rawWord) {
-  const cmp = compact(rawRoot);
-  if (!roots[cmp]) return { result:'NON', pattern:null };
-  const nw = norm(rawWord);
-  for (const np of Object.keys(patterns)) {
-    const w = derive(rawRoot, np);
-    if (w && norm(w) === nw) return { result:'OUI', pattern:np, display:patterns[np] };
+  try {
+    const rl=await fetch('/api/roots').then(r=>r.json());
+    rl.forEach(r=>{if(r&&!validateRoot(r)){const c=compact(r);if(!roots[c])roots[c]={derived:{}};}});
+  } catch(e) {
+    ['ك-ت-ب','د-ر-س','ع-ل-م','ف-ه-م','ق-ر-أ','س-م-ع','ذ-ه-ب','ج-ل-س','ح-س-ب','ع-م-ل'].forEach(r=>{const c=compact(r);if(!roots[c])roots[c]={derived:{}};});
   }
-  return { result:'NON', pattern:null };
-}
-
-// ── STATS ─────────────────────────────────────────────────
-function updateStats() {
-  document.getElementById('stat-roots').textContent    = Object.keys(roots).length;
-  document.getElementById('stat-patterns').textContent = Object.keys(patterns).length;
-}
-
-// ── TOAST ─────────────────────────────────────────────────
-function toast(msg, ms=2200) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), ms);
-}
-
-// ── VIEW SWITCHING ────────────────────────────────────────
-let currentView = 'dict';
-function switchView(btn) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
-  const name = btn.dataset.view;
-  document.getElementById('view-' + name).classList.add('active');
-  btn.classList.add('active');
-  currentView = name;
-  if (name === 'manage')   renderMgmtAll();
-  if (name === 'schemes')  renderSchemesGrid(document.getElementById('scheme-filter').value);
-  if (name === 'generate') renderGenPatterns();
-  if (name === 'explorer') populateExpSelect();
-}
-function switchToView(name) {
-  const btn = document.querySelector(`.stab[data-view="${name}"]`);
-  if (btn) switchView(btn);
-}
-
-// ── GLOBAL SEARCH ─────────────────────────────────────────
-function globalSearch(query) {
-  if (!query.trim()) return;
-  const n = norm(query);
-  const matchRoot = Object.keys(roots).find(c => c.includes(n));
-  if (matchRoot) { openDictEntry(dashed(matchRoot)); return; }
-  const matchPat = Object.keys(patterns).find(np => np.includes(n) || norm(patterns[np]).includes(n));
-  if (matchPat) {
-    switchToView('schemes');
-    setTimeout(() => {
-      document.getElementById('scheme-filter').value = patterns[matchPat];
-      renderSchemesGrid(patterns[matchPat]);
-    }, 50);
-    return;
+  try {
+    const pl=await fetch('/api/patterns').then(r=>r.json());
+    pl.forEach(p=>{if(p){const n=norm(p);if(!patterns[n])patterns[n]=p;}});
+  } catch(e) {
+    ['فاعل','مفعول','فعّال','مفعل','تفعيل','فعيل','فعول','أفعل'].forEach(p=>{const n=norm(p);if(!patterns[n])patterns[n]=p;});
   }
-  toast('لا توجد نتائج لـ: ' + query);
+  const ls=document.getElementById('loading-screen');
+  if(ls){ls.style.opacity='0';setTimeout(()=>ls.style.display='none',420);}
+  updateStats();renderAll();renderGenPatterns();populateExpSelect();renderFeatured();renderSchemesGrid('');
 }
 
-// ── SIDEBAR ───────────────────────────────────────────────
-function renderRootSidebar(filter) {
-  filter = filter || '';
-  const el  = document.getElementById('root-sidebar');
-  const all = Object.keys(roots).map(c => dashed(c)).sort();
-  const fn  = norm(filter);
-  const fil = fn ? all.filter(r => compact(r).includes(fn)) : all;
-  if (!fil.length) { el.innerHTML = '<div class="empty" style="padding:.8rem"><p>لا توجد جذور</p></div>'; return; }
-  el.innerHTML = fil.map(r =>
-    `<div class="root-pill" onclick="openDictEntry('${r}')" id="rp-${compact(r)}">${r}</div>`
-  ).join('');
+function derive(rawRoot,normPat){
+  if(validateRoot(rawRoot))return null;
+  const parts=norm(rawRoot).split('-');
+  if(parts.length!==3)return null;
+  const[f,a,l]=parts;
+  return normPat.split('').map(c=>c==='ف'?f:c==='ع'?a:c==='ل'?l:c).join('');
+}
+function genFamily(rawRoot){
+  const cmp=compact(rawRoot);if(!roots[cmp])return null;
+  return Object.keys(patterns).reduce((acc,np)=>{const word=derive(rawRoot,np);if(word)acc.push({np,display:patterns[np],word});return acc;},[]);
+}
+function doValidateWord(rawRoot,rawWord){
+  const cmp=compact(rawRoot);if(!roots[cmp])return{result:'NON',pattern:null};
+  const nw=norm(rawWord);
+  for(const np of Object.keys(patterns)){const w=derive(rawRoot,np);if(w&&norm(w)===nw)return{result:'OUI',pattern:np,display:patterns[np]};}
+  return{result:'NON',pattern:null};
+}
+function updateStats(){
+  document.getElementById('stat-roots').textContent=Object.keys(roots).length;
+  document.getElementById('stat-patterns').textContent=Object.keys(patterns).length;
+}
+function toast(msg,ms=2200){
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),ms);
 }
 
-function renderPatSidebar() {
-  document.getElementById('pat-sidebar').innerHTML =
-    Object.keys(patterns).map(np => {
-      const d  = patterns[np];
-      const df = SCHEME_DEFS[norm(d)] || SCHEME_DEFS[d] || {};
-      return `<div class="pat-item" onclick="switchToView('schemes')">
-        <div>
-          <div class="pi-name">${d}</div>
-          <div class="pi-def">${df.cat || ''}</div>
-        </div>
-      </div>`;
-    }).join('');
+let currentView='dict';
+function switchView(btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  const name=btn.dataset.view;
+  document.getElementById('view-'+name).classList.add('active');
+  btn.classList.add('active');currentView=name;
+  if(name==='manage')renderMgmtAll();
+  if(name==='schemes')renderSchemesGrid(document.getElementById('scheme-filter').value);
+  if(name==='generate')renderGenPatterns();
+  if(name==='explorer')populateExpSelect();
+}
+function switchToView(name){const btn=document.querySelector(`.stab[data-view="${name}"]`);if(btn)switchView(btn);}
+
+function globalSearch(query){
+  if(!query.trim())return;
+  const n=norm(query);
+  const mr=Object.keys(roots).find(c=>c.includes(n));
+  if(mr){openDictEntry(dashed(mr));return;}
+  const mp=Object.keys(patterns).find(np=>np.includes(n)||norm(patterns[np]).includes(n));
+  if(mp){switchToView('schemes');setTimeout(()=>{document.getElementById('scheme-filter').value=patterns[mp];renderSchemesGrid(patterns[mp]);},50);return;}
+  toast('لا توجد نتائج لـ: '+query);
 }
 
-function renderAll() {
-  renderRootSidebar(document.getElementById('root-filter')?.value || '');
-  renderPatSidebar();
+function renderRootSidebar(filter){
+  filter=filter||'';
+  const el=document.getElementById('root-sidebar');
+  const all=Object.keys(roots).map(c=>dashed(c)).sort();
+  const fn=norm(filter);
+  const fil=fn?all.filter(r=>compact(r).includes(fn)):all;
+  if(!fil.length){el.innerHTML='<div class="empty"><span class="ei">◌</span><p>لا توجد جذور</p></div>';return;}
+  el.innerHTML=fil.map(r=>`<div class="root-pill" onclick="openDictEntry('${r}')" id="rp-${compact(r)}">${r}</div>`).join('');
 }
-
-// ── DICTIONARY ────────────────────────────────────────────
-function renderFeatured() {
-  document.getElementById('dict-featured').innerHTML =
-    Object.keys(roots).map(c => dashed(c)).slice(0, 4).map(r => miniRootCard(r)).join('');
-}
-
-function miniRootCard(dashedRoot) {
-  const family  = genFamily(dashedRoot) || [];
-  const letters = dashedRoot.split('-');
-  const preview = family.slice(0, 6).map(f =>
-    `<div class="fam-item" style="padding:.42rem .6rem;" onclick="openDictEntry('${dashedRoot}')">
-       <span class="fi-word">${f.word}</span>
-       <span class="fi-pattern">${f.display}</span>
-     </div>`
-  ).join('');
-  return `
-    <div style="background:var(--cream);border:1px solid var(--parchment-dk);border-radius:14px;margin-bottom:.85rem;overflow:hidden;">
-      <div style="background:linear-gradient(90deg,var(--ink),#2e1a06);padding:.62rem 1.05rem;
-                  display:flex;align-items:center;justify-content:space-between;cursor:pointer;"
-           onclick="openDictEntry('${dashedRoot}')">
-        <span style="font-family:'Amiri',serif;font-size:1.65rem;color:#fff;">
-          ${letters[0]}<span style="color:var(--gold-light);font-size:.9rem;"> – </span>${letters[1]}<span style="color:var(--gold-light);font-size:.9rem;"> – </span>${letters[2]}
-        </span>
-        <span class="tag tag-gold">${family.length} مشتق</span>
-      </div>
-      <div style="padding:.65rem .88rem;display:flex;flex-wrap:wrap;gap:.32rem;">${preview}</div>
-    </div>`;
-}
-
-function openDictEntry(dashedRoot) {
-  document.querySelectorAll('.root-pill').forEach(p => p.classList.remove('selected'));
-  const rp = document.getElementById('rp-' + compact(dashedRoot));
-  if (rp) rp.classList.add('selected');
-  if (currentView !== 'dict') switchToView('dict');
-  document.getElementById('dict-home').style.display  = 'none';
-  document.getElementById('dict-entry').style.display = 'block';
-
-  const family  = genFamily(dashedRoot) || [];
-  const letters = dashedRoot.split('-');
-
-  const schemeCards = family.map(f => {
-    const df = SCHEME_DEFS[norm(f.display)] || SCHEME_DEFS[f.display] || {};
-    return `<div class="scheme-card" onclick="switchToView('schemes')">
-      <span class="sc-badge">${df.cat || 'وزن'}</span>
-      <span class="sc-word">${f.word}</span>
-      <span class="sc-pattern">${f.display}</span>
-      ${df.def ? `<div class="sc-def">${df.def}</div>` : ''}
-    </div>`;
+function renderPatSidebar(){
+  document.getElementById('pat-sidebar').innerHTML=Object.keys(patterns).map(np=>{
+    const d=patterns[np],df=SCHEME_DEFS[norm(d)]||SCHEME_DEFS[d]||{};
+    return `<div class="pat-item" onclick="switchToView('schemes')"><div class="pi-name">${d}</div><div class="pi-def">${df.cat||''}</div></div>`;
   }).join('');
+}
+function renderAll(){renderRootSidebar(document.getElementById('root-filter')?.value||'');renderPatSidebar();}
 
-  document.getElementById('dict-entry').innerHTML = `
+function renderFeatured(){
+  document.getElementById('dict-featured').innerHTML=Object.keys(roots).map(c=>dashed(c)).slice(0,4).map(r=>miniRootCard(r)).join('');
+}
+function miniRootCard(dashedRoot){
+  const family=genFamily(dashedRoot)||[],letters=dashedRoot.split('-');
+  const preview=family.slice(0,6).map(f=>`<div class="fam-item" style="padding:.4rem .6rem;" onclick="openDictEntry('${dashedRoot}')"><span class="fi-word">${f.word}</span><span class="fi-pattern">${f.display}</span></div>`).join('');
+  return `<div class="feat-card">
+    <div class="feat-card-head" onclick="openDictEntry('${dashedRoot}')">
+      <span class="feat-root-label">${letters[0]}<span class="sep"> · </span>${letters[1]}<span class="sep"> · </span>${letters[2]}</span>
+      <span class="tag tag-sage">${family.length} مشتق</span>
+    </div>
+    <div style="padding:.62rem .82rem;display:flex;flex-wrap:wrap;gap:.3rem;">${preview}</div>
+  </div>`;
+}
+
+function openDictEntry(dashedRoot){
+  document.querySelectorAll('.root-pill').forEach(p=>p.classList.remove('selected'));
+  const rp=document.getElementById('rp-'+compact(dashedRoot));if(rp)rp.classList.add('selected');
+  if(currentView!=='dict')switchToView('dict');
+  document.getElementById('dict-home').style.display='none';
+  document.getElementById('dict-entry').style.display='block';
+  const family=genFamily(dashedRoot)||[],letters=dashedRoot.split('-');
+  const schemeCards=family.map(f=>{
+    const df=SCHEME_DEFS[norm(f.display)]||SCHEME_DEFS[f.display]||{};
+    return `<div class="scheme-card" onclick="switchToView('schemes')"><span class="sc-badge">${df.cat||'وزن'}</span><span class="sc-word">${f.word}</span><span class="sc-pattern">${f.display}</span>${df.def?`<div class="sc-def">${df.def}</div>`:''}</div>`;
+  }).join('');
+  document.getElementById('dict-entry').innerHTML=`
     <div class="dict-entry-header">
-      <div class="dict-root-big">
-        ${letters[0]}<span class="dash"> – </span>${letters[1]}<span class="dash"> – </span>${letters[2]}
-      </div>
-      <div class="dict-root-subtitle">${dashedRoot} · جذر ثلاثي</div>
-      <div class="dict-root-tags">
-        <span class="tag tag-teal">${family.length} مشتق</span>
-        <span class="tag tag-gold">BST ✓</span>
-      </div>
+      <div class="dict-root-big">${letters[0]}<span class="sep"> · </span>${letters[1]}<span class="sep"> · </span>${letters[2]}</div>
+      <div class="dict-root-subtitle">جذر ثلاثي · ${dashedRoot}</div>
+      <div class="dict-root-tags"><span class="tag tag-sage">${family.length} مشتق</span><span class="tag tag-sand">BST ✓</span></div>
     </div>
     <div class="dict-body">
       <button class="btn btn-ghost btn-sm" onclick="backToHome()" style="margin-bottom:.95rem;">← العودة</button>
-      <div class="dict-section-title">المشتقات على الأوزان الصرفية</div>
-      <div class="scheme-grid">${schemeCards || '<div class="empty"><span class="ei">📭</span><p>لا توجد أوزان محمّلة</p></div>'}</div>
+      <div class="section-title"><span class="st-dot"></span>المشتقات على الأوزان الصرفية</div>
+      <div class="scheme-grid">${schemeCards||'<div class="empty"><span class="ei">◌</span><p>لا توجد أوزان محمّلة</p></div>'}</div>
     </div>`;
 }
-
-function backToHome() {
-  document.getElementById('dict-home').style.display  = 'block';
-  document.getElementById('dict-entry').style.display = 'none';
-  document.querySelectorAll('.root-pill').forEach(p => p.classList.remove('selected'));
+function backToHome(){
+  document.getElementById('dict-home').style.display='block';
+  document.getElementById('dict-entry').style.display='none';
+  document.querySelectorAll('.root-pill').forEach(p=>p.classList.remove('selected'));
 }
 
-// ── GENERATE (selective) ──────────────────────────────────
-function renderGenPatterns() {
-  document.getElementById('gen-patterns').innerHTML =
-    Object.keys(patterns).map(np =>
-      `<label><input type="checkbox" value="${np}" checked> ${patterns[np]}</label>`
-    ).join('');
-}
-function checkAll()   { document.querySelectorAll('#gen-patterns input').forEach(cb => cb.checked = true); }
-function uncheckAll() { document.querySelectorAll('#gen-patterns input').forEach(cb => cb.checked = false); }
+function renderGenPatterns(){document.getElementById('gen-patterns').innerHTML=Object.keys(patterns).map(np=>`<label><input type="checkbox" value="${np}" checked> ${patterns[np]}</label>`).join('');}
+function checkAll()  {document.querySelectorAll('#gen-patterns input').forEach(cb=>cb.checked=true);}
+function uncheckAll(){document.querySelectorAll('#gen-patterns input').forEach(cb=>cb.checked=false);}
 
-function doGenSelected() {
-  const rawRoot = document.getElementById('gen-root').value.trim();
-  const err = validateRoot(rawRoot);
-  if (err) { document.getElementById('gen-result').innerHTML = rbox(err,'err'); return; }
-  if (!roots[compact(rawRoot)]) { document.getElementById('gen-result').innerHTML = rbox('الجذر غير موجود في الشجرة — أضفه من تبويب الإدارة.','err'); return; }
-  const checked = [...document.querySelectorAll('#gen-patterns input:checked')].map(cb => cb.value);
-  if (!checked.length) { document.getElementById('gen-result').innerHTML = rbox('اختر وزنًا على الأقل.','err'); return; }
-  const items = checked.map(np => {
-    const word = derive(rawRoot, np);
-    const d    = patterns[np];
-    const df   = SCHEME_DEFS[norm(d)] || SCHEME_DEFS[d] || {};
-    return word
-      ? `<div class="fam-item"><span class="fi-word">${word}</span><span class="fi-pattern">${d}</span><div class="fi-def">${df.def||''}</div></div>`
-      : `<div class="fam-item" style="opacity:.3"><span class="fi-word">—</span><span class="fi-pattern">${d}</span></div>`;
+function doGenSelected(){
+  const rawRoot=document.getElementById('gen-root').value.trim();
+  const err=validateRoot(rawRoot);
+  if(err){document.getElementById('gen-result').innerHTML=rbox(err,'err');return;}
+  if(!roots[compact(rawRoot)]){document.getElementById('gen-result').innerHTML=rbox('الجذر غير موجود — أضفه من تبويب الإدارة.','err');return;}
+  const checked=[...document.querySelectorAll('#gen-patterns input:checked')].map(cb=>cb.value);
+  if(!checked.length){document.getElementById('gen-result').innerHTML=rbox('اختر وزنًا على الأقل.','err');return;}
+  const items=checked.map(np=>{
+    const word=derive(rawRoot,np),d=patterns[np],df=SCHEME_DEFS[norm(d)]||SCHEME_DEFS[d]||{};
+    return word?`<div class="fam-item"><span class="fi-word">${word}</span><span class="fi-pattern">${d}</span><div class="fi-def">${df.def||''}</div></div>`:`<div class="fam-item" style="opacity:.22"><span class="fi-word">—</span><span class="fi-pattern">${d}</span></div>`;
   }).join('');
-  document.getElementById('gen-result').innerHTML = `
-    <div style="margin-top:.88rem;">
-      <div class="dict-section-title" style="font-size:.9rem;">نتائج الجذر ${rawRoot} (${checked.length} وزن)</div>
-      <div class="fam-grid">${items}</div>
-    </div>`;
+  document.getElementById('gen-result').innerHTML=`<div style="margin-top:.88rem;"><div class="section-title"><span class="st-dot"></span>نتائج الجذر ${rawRoot} — ${checked.length} وزن</div><div class="fam-grid">${items}</div></div>`;
 }
 
-// ── VALIDATE ──────────────────────────────────────────────
-function doValidate() {
-  const rawRoot = document.getElementById('val-root').value.trim();
-  const rawWord = document.getElementById('val-word').value.trim();
-  const err = validateRoot(rawRoot);
-  if (err) { document.getElementById('val-result').innerHTML = rbox(err,'err'); return; }
-  if (!rawWord) { document.getElementById('val-result').innerHTML = rbox('أدخل الكلمة المراد فحصها','err'); return; }
-  if (!roots[compact(rawRoot)]) { document.getElementById('val-result').innerHTML = rbox('الجذر غير موجود في الشجرة','err'); return; }
-  const res = doValidateWord(rawRoot, rawWord);
-  if (res.result === 'OUI') {
-    const df = SCHEME_DEFS[norm(res.display||'')] || SCHEME_DEFS[res.display||''] || {};
-    document.getElementById('val-result').innerHTML = `
-      <div class="rbox ok" style="text-align:center;padding:1.35rem;">
-        <div class="val-result-yes">نعم ✅</div>
-        <div style="margin-top:.65rem;font-size:.9rem;">
-          الكلمة <strong style="font-family:'Amiri',serif;font-size:1.12rem;">${rawWord}</strong>
-          مشتقة من الجذر <strong>${rawRoot}</strong>
-        </div>
-        <div style="margin-top:.42rem;">
-          على وزن <span style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--teal);">${res.display||res.pattern}</span>
-          ${df.cat ? `<span class="tag tag-gold" style="margin-right:.32rem;">${df.cat}</span>` : ''}
-        </div>
-        ${df.def ? `<div style="margin-top:.45rem;font-size:.8rem;color:#555;">${df.def}</div>` : ''}
-      </div>`;
+function doValidate(){
+  const rawRoot=document.getElementById('val-root').value.trim(),rawWord=document.getElementById('val-word').value.trim();
+  const err=validateRoot(rawRoot);
+  if(err){document.getElementById('val-result').innerHTML=rbox(err,'err');return;}
+  if(!rawWord){document.getElementById('val-result').innerHTML=rbox('أدخل الكلمة المراد فحصها','err');return;}
+  if(!roots[compact(rawRoot)]){document.getElementById('val-result').innerHTML=rbox('الجذر غير موجود في الشجرة','err');return;}
+  const res=doValidateWord(rawRoot,rawWord);
+  if(res.result==='OUI'){
+    const df=SCHEME_DEFS[norm(res.display||'')]||SCHEME_DEFS[res.display||'']||{};
+    document.getElementById('val-result').innerHTML=`<div class="rbox ok" style="text-align:center;padding:1.35rem;">
+      <div class="val-big yes">نعم ✓</div>
+      <div style="margin-top:.62rem;font-size:.9rem;color:var(--text);">
+        <strong style="font-family:'Scheherazade New',serif;font-size:1.12rem;">${rawWord}</strong> مشتقة من الجذر <strong>${rawRoot}</strong>
+      </div>
+      <div style="margin-top:.42rem;">على وزن <span style="font-family:'Scheherazade New',serif;font-size:1.22rem;color:var(--sage-bright);">${res.display||res.pattern}</span>${df.cat?`<span class="tag tag-sand" style="margin-right:.32rem;">${df.cat}</span>`:''}</div>
+      ${df.def?`<div style="margin-top:.45rem;font-size:.77rem;color:var(--text-3);">${df.def}</div>`:''}
+    </div>`;
   } else {
-    document.getElementById('val-result').innerHTML = `
-      <div class="rbox err" style="text-align:center;padding:1.35rem;">
-        <div class="val-result-no">لا ❌</div>
-        <div style="margin-top:.48rem;">الكلمة <strong>${rawWord}</strong> لا تنتمي مورفولوجيًا إلى الجذر <strong>${rawRoot}</strong></div>
-      </div>`;
+    document.getElementById('val-result').innerHTML=`<div class="rbox err" style="text-align:center;padding:1.35rem;">
+      <div class="val-big no">لا ✗</div>
+      <div style="margin-top:.48rem;color:var(--text);">الكلمة <strong>${rawWord}</strong> لا تنتمي مورفولوجيًا إلى الجذر <strong>${rawRoot}</strong></div>
+    </div>`;
   }
 }
 
-// ── EXPLORER (generate full family) ──────────────────────
-function populateExpSelect() {
-  const sel = document.getElementById('exp-root');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">-- اختر جذرًا --</option>';
-  Object.keys(roots).map(c => dashed(c)).sort().forEach(r => {
-    const o = document.createElement('option');
-    o.value = r; o.textContent = r; sel.appendChild(o);
-  });
-  if (cur) sel.value = cur;
+function populateExpSelect(){
+  const sel=document.getElementById('exp-root'),cur=sel.value;
+  sel.innerHTML='<option value="">-- اختر جذرًا --</option>';
+  Object.keys(roots).map(c=>dashed(c)).sort().forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;sel.appendChild(o);});
+  if(cur)sel.value=cur;
+}
+function doExplore(){
+  const r=document.getElementById('exp-root').value;
+  if(!r){toast('⚠ اختر جذرًا أولاً');return;}
+  const family=genFamily(r)||[],letters=r.split('-');
+  const items=family.map(f=>{const df=SCHEME_DEFS[norm(f.display)]||SCHEME_DEFS[f.display]||{};return `<div class="fam-item" onclick="switchToView('schemes')"><span class="fi-word">${f.word}</span><span class="fi-pattern">${f.display}</span><div class="fi-def">${df.def||''}</div></div>`;}).join('');
+  document.getElementById('exp-result').innerHTML=`<div class="exp-hero"><div class="root-display">${letters[0]}<span class="sep"> · </span>${letters[1]}<span class="sep"> · </span>${letters[2]}</div><div class="root-count">${family.length} مشتق على جميع الأوزان الصرفية</div></div><div class="fam-grid">${items}</div>`;
 }
 
-function doExplore() {
-  const r = document.getElementById('exp-root').value;
-  if (!r) { toast('⚠️ اختر جذرًا أولاً'); return; }
-  const family  = genFamily(r) || [];
-  const letters = r.split('-');
-  const items = family.map(f => {
-    const df = SCHEME_DEFS[norm(f.display)] || SCHEME_DEFS[f.display] || {};
-    return `<div class="fam-item" onclick="switchToView('schemes')">
-      <span class="fi-word">${f.word}</span>
-      <span class="fi-pattern">${f.display}</span>
-      <div class="fi-def">${df.def || ''}</div>
-    </div>`;
-  }).join('');
-  document.getElementById('exp-result').innerHTML = `
-    <div class="exp-hero">
-      <div class="root-display">
-        ${letters[0]}<span class="sep"> – </span>${letters[1]}<span class="sep"> – </span>${letters[2]}
-      </div>
-      <div class="root-count">${family.length} مشتق على جميع الأوزان الصرفية</div>
-    </div>
-    <div class="fam-grid">${items}</div>`;
+function mgmtAddRoot(){
+  const raw=document.getElementById('mgmt-add-root').value.trim(),err=validateRoot(raw);
+  if(err){document.getElementById('mgmt-root-msg').innerHTML=rbox(err,'err');return;}
+  const cmp=compact(raw);
+  if(roots[cmp]){document.getElementById('mgmt-root-msg').innerHTML=rbox('الجذر موجود بالفعل.','warn');return;}
+  roots[cmp]={derived:{}};
+  document.getElementById('mgmt-root-msg').innerHTML=rbox(`تمت إضافة الجذر ${raw}`,'ok');
+  document.getElementById('mgmt-add-root').value='';
+  renderAll();renderMgmtAll();populateExpSelect();updateStats();toast('✓ تمت إضافة الجذر');
 }
-
-// ── MANAGE ────────────────────────────────────────────────
-function mgmtAddRoot() {
-  const raw = document.getElementById('mgmt-add-root').value.trim();
-  const err = validateRoot(raw);
-  if (err) { document.getElementById('mgmt-root-msg').innerHTML = rbox(err,'err'); return; }
-  const cmp = compact(raw);
-  if (roots[cmp]) { document.getElementById('mgmt-root-msg').innerHTML = rbox('الجذر موجود بالفعل.','warn'); return; }
-  roots[cmp] = { derived:{} };
-  document.getElementById('mgmt-root-msg').innerHTML = rbox(`✅ تمت إضافة الجذر ${raw}`,'ok');
-  document.getElementById('mgmt-add-root').value = '';
-  renderAll(); renderMgmtAll(); populateExpSelect(); updateStats(); toast('✅ تمت إضافة الجذر');
-}
-
-function mgmtDelRoot() {
-  const raw = document.getElementById('mgmt-del-root').value.trim();
-  if (!raw) { document.getElementById('mgmt-root-msg').innerHTML = rbox('أدخل الجذر المراد حذفه.','err'); return; }
-  const cmp = compact(raw);
-  if (!roots[cmp]) { document.getElementById('mgmt-root-msg').innerHTML = rbox('الجذر غير موجود.','err'); return; }
+function mgmtDelRoot(){
+  const raw=document.getElementById('mgmt-del-root').value.trim();
+  if(!raw){document.getElementById('mgmt-root-msg').innerHTML=rbox('أدخل الجذر المراد حذفه.','err');return;}
+  const cmp=compact(raw);
+  if(!roots[cmp]){document.getElementById('mgmt-root-msg').innerHTML=rbox('الجذر غير موجود.','err');return;}
   delete roots[cmp];
-  document.getElementById('mgmt-root-msg').innerHTML = rbox(`✅ تم حذف الجذر ${raw}`,'ok');
-  document.getElementById('mgmt-del-root').value = '';
-  renderAll(); renderMgmtAll(); populateExpSelect(); updateStats(); toast('🗑 تم حذف الجذر');
+  document.getElementById('mgmt-root-msg').innerHTML=rbox(`تم حذف الجذر ${raw}`,'ok');
+  document.getElementById('mgmt-del-root').value='';
+  renderAll();renderMgmtAll();populateExpSelect();updateStats();toast('حُذف الجذر');
 }
-
-function mgmtSearchRoot() {
-  const raw = document.getElementById('mgmt-search-root').value.trim();
-  const cmp = compact(raw);
-  document.getElementById('mgmt-root-msg').innerHTML = roots[cmp]
-    ? rbox('✅ الجذر موجود في الشجرة الثنائية','ok')
-    : rbox('❌ الجذر غير موجود في الشجرة.','err');
+function mgmtSearchRoot(){
+  const raw=document.getElementById('mgmt-search-root').value.trim(),cmp=compact(raw);
+  document.getElementById('mgmt-root-msg').innerHTML=roots[cmp]?rbox('✓ الجذر موجود في الشجرة الثنائية','ok'):rbox('✗ الجذر غير موجود في الشجرة.','err');
 }
-
-function mgmtAddPat() {
-  const raw = document.getElementById('mgmt-add-pat').value.trim();
-  const np  = norm(raw);
-  if (!np || np.length < 4 || !np.includes('ف') || !np.includes('ع') || !np.includes('ل')) {
-    document.getElementById('mgmt-pat-msg').innerHTML = rbox('وزن غير صالح — يجب أن يحتوي على ف وع ول (4 أحرف على الأقل).','err'); return;
-  }
-  if (patterns[np]) { document.getElementById('mgmt-pat-msg').innerHTML = rbox('الوزن موجود بالفعل.','warn'); return; }
-  patterns[np] = raw;
-  document.getElementById('mgmt-pat-msg').innerHTML = rbox(`✅ تمت إضافة الوزن ${raw}`,'ok');
-  document.getElementById('mgmt-add-pat').value = '';
-  renderAll(); renderMgmtAll(); renderGenPatterns(); updateStats(); toast('✅ تمت إضافة الوزن');
+function mgmtAddPat(){
+  const raw=document.getElementById('mgmt-add-pat').value.trim(),np=norm(raw);
+  if(!np||np.length<4||!np.includes('ف')||!np.includes('ع')||!np.includes('ل')){document.getElementById('mgmt-pat-msg').innerHTML=rbox('وزن غير صالح — يجب أن يحتوي على ف وع ول.','err');return;}
+  if(patterns[np]){document.getElementById('mgmt-pat-msg').innerHTML=rbox('الوزن موجود بالفعل.','warn');return;}
+  patterns[np]=raw;
+  document.getElementById('mgmt-pat-msg').innerHTML=rbox(`تمت إضافة الوزن ${raw}`,'ok');
+  document.getElementById('mgmt-add-pat').value='';
+  renderAll();renderMgmtAll();renderGenPatterns();updateStats();toast('✓ تمت إضافة الوزن');
 }
-
-function mgmtDelPat() {
-  const raw = document.getElementById('mgmt-del-pat').value.trim();
-  const np  = norm(raw);
-  if (!patterns[np]) { document.getElementById('mgmt-pat-msg').innerHTML = rbox('الوزن غير موجود.','err'); return; }
+function mgmtDelPat(){
+  const raw=document.getElementById('mgmt-del-pat').value.trim(),np=norm(raw);
+  if(!patterns[np]){document.getElementById('mgmt-pat-msg').innerHTML=rbox('الوزن غير موجود.','err');return;}
   delete patterns[np];
-  document.getElementById('mgmt-pat-msg').innerHTML = rbox(`✅ تم حذف الوزن ${raw}`,'ok');
-  document.getElementById('mgmt-del-pat').value = '';
-  renderAll(); renderMgmtAll(); renderGenPatterns(); updateStats(); toast('🗑 تم حذف الوزن');
+  document.getElementById('mgmt-pat-msg').innerHTML=rbox(`تم حذف الوزن ${raw}`,'ok');
+  document.getElementById('mgmt-del-pat').value='';
+  renderAll();renderMgmtAll();renderGenPatterns();updateStats();toast('حُذف الوزن');
 }
-
-function renderMgmtAll() {
-  document.getElementById('mgmt-all-roots').innerHTML =
-    Object.keys(roots).map(c => dashed(c)).sort().map(r =>
-      `<span onclick="openDictEntry('${r}')"
-             style="cursor:pointer;background:var(--parchment);border:1px solid var(--parchment-dk);
-                    border-radius:7px;padding:.2rem .62rem;font-family:'Amiri',serif;font-size:.96rem;"
-             onmouseover="this.style.background='var(--teal-pale)'"
-             onmouseout="this.style.background='var(--parchment)'">${r}</span>`
-    ).join('');
-  document.getElementById('mgmt-all-pats').innerHTML =
-    Object.keys(patterns).map(np =>
-      `<span onclick="switchToView('schemes')"
-             style="cursor:pointer;background:var(--gold-pale);border:1px solid var(--parchment-dk);
-                    border-radius:7px;padding:.2rem .62rem;font-family:'Amiri',serif;font-size:.96rem;">${patterns[np]}</span>`
-    ).join('');
+function renderMgmtAll(){
+  document.getElementById('mgmt-all-roots').innerHTML=Object.keys(roots).map(c=>dashed(c)).sort().map(r=>`<span onclick="openDictEntry('${r}')" style="cursor:pointer;background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:.2rem .62rem;font-family:'Scheherazade New',serif;font-size:.95rem;color:var(--text-3);transition:all .14s;" onmouseover="this.style.borderColor='var(--sage)';this.style.color='var(--sage-bright)'" onmouseout="this.style.borderColor='var(--line)';this.style.color='var(--text-3)'">${r}</span>`).join('');
+  document.getElementById('mgmt-all-pats').innerHTML=Object.keys(patterns).map(np=>`<span onclick="switchToView('schemes')" style="cursor:pointer;background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:.2rem .62rem;font-family:'Scheherazade New',serif;font-size:.95rem;color:var(--sand);transition:all .14s;" onmouseover="this.style.borderColor='var(--sand)'" onmouseout="this.style.borderColor='var(--line)'">${patterns[np]}</span>`).join('');
 }
-
-// ── QUICK ADD (sidebar) ───────────────────────────────────
-function quickAddRoot() {
-  const raw = document.getElementById('quick-add-root').value.trim();
-  const err = validateRoot(raw);
-  if (err) { document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--red);margin-top:.25rem;">${err}</div>`; return; }
-  const cmp = compact(raw);
-  if (roots[cmp]) { document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--gold);margin-top:.25rem;">موجود بالفعل</div>`; return; }
-  roots[cmp] = { derived:{} };
-  document.getElementById('quick-add-root').value = '';
-  document.getElementById('qar-msg').innerHTML = `<div style="font-size:.7rem;color:var(--green);margin-top:.25rem;">✅ تمت الإضافة</div>`;
-  renderAll(); populateExpSelect(); updateStats(); toast('✅ تمت إضافة الجذر');
+function renderSchemesGrid(filter){
+  const el=document.getElementById('schemes-grid'),fn=norm(filter||'');
+  const ps=Object.keys(patterns),show=fn?ps.filter(np=>np.includes(fn)||norm(patterns[np]).includes(fn)):ps;
+  if(!show.length){el.innerHTML='<div class="empty"><span class="ei">◌</span><p>لا توجد نتائج</p></div>';return;}
+  el.innerHTML=`<div class="scheme-grid">`+show.map(np=>{
+    const d=patterns[np],df=SCHEME_DEFS[norm(d)]||SCHEME_DEFS[d]||{};
+    const exHtml=(df.ex||[]).map(e=>`<span style="background:var(--sage-pale);color:var(--sage-bright);border:1px solid rgba(92,138,110,.25);border-radius:5px;padding:.14rem .58rem;font-family:'Scheherazade New',serif;font-size:.87rem;">${e}</span>`).join('');
+    return `<div class="scheme-card" style="cursor:default;padding:.98rem 1.08rem;"><span class="sc-badge">${df.cat||'وزن'}</span><span class="sc-word" style="font-size:2rem;">${d}</span><div style="margin-top:.48rem;"><div style="font-size:.63rem;color:var(--sand);font-weight:700;margin-bottom:.15rem;letter-spacing:.06em;text-transform:uppercase;">${df.cat||'وزن صرفي'}</div><div style="font-size:.74rem;color:var(--text-3);line-height:1.6;">${df.def||'وزن صرفي عربي يُستخدم في اشتقاق الكلمات.'}</div>${df.ex?`<div style="display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.52rem;">${exHtml}</div>`:''}</div></div>`;
+  }).join('')+`</div>`;
 }
+function rbox(msg,type){return `<div class="rbox ${type||''}">${msg}</div>`;}
 
-// ── SCHEMES ENCYCLOPEDIA ──────────────────────────────────
-function renderSchemesGrid(filter) {
-  const el   = document.getElementById('schemes-grid');
-  const fn   = norm(filter || '');
-  const ps   = Object.keys(patterns);
-  const show = fn ? ps.filter(np => np.includes(fn) || norm(patterns[np]).includes(fn)) : ps;
-  if (!show.length) { el.innerHTML = '<div class="empty"><span class="ei">📭</span><p>لا توجد نتائج</p></div>'; return; }
-  el.innerHTML = `<div class="scheme-grid">` + show.map(np => {
-    const d  = patterns[np];
-    const df = SCHEME_DEFS[norm(d)] || SCHEME_DEFS[d] || {};
-    const exHtml = (df.ex||[]).map(e =>
-      `<span style="background:var(--teal);color:#fff;border-radius:6px;padding:.18rem .65rem;font-family:'Amiri',serif;font-size:.9rem;">${e}</span>`
-    ).join('');
-    return `<div class="scheme-card" style="cursor:default;padding:.95rem 1.05rem;">
-      <span class="sc-badge">${df.cat || 'وزن'}</span>
-      <span class="sc-word" style="font-size:1.9rem;">${d}</span>
-      <div style="margin-top:.45rem;">
-        <div style="font-size:.7rem;color:var(--gold);font-weight:700;margin-bottom:.15rem;">${df.cat || 'وزن صرفي'}</div>
-        <div style="font-size:.78rem;color:#444;line-height:1.6;">${df.def || 'وزن صرفي عربي يُستخدم في اشتقاق الكلمات.'}</div>
-        ${df.ex ? `<div style="display:flex;flex-wrap:wrap;gap:.28rem;margin-top:.52rem;">${exHtml}</div>` : ''}
-      </div>
-    </div>`;
-  }).join('') + `</div>`;
+// ── THEME TOGGLE ──────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('morpho-theme', isLight ? 'light' : 'dark');
+  updateThemeIcons(isLight);
 }
-
-// ── HELPERS ───────────────────────────────────────────────
-function rbox(msg, type) {
-  const cls = {err:'err', ok:'ok', warn:'warn'}[type] || '';
-  return `<div class="rbox ${cls}">${msg}</div>`;
+function updateThemeIcons(isLight) {
+  document.getElementById('theme-icon-dark').style.opacity  = isLight ? '.35' : '1';
+  document.getElementById('theme-icon-light').style.opacity = isLight ? '1'   : '.35';
 }
+// Restore saved theme preference
+(function() {
+  const saved = localStorage.getItem('morpho-theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    updateThemeIcons(true);
+  } else {
+    updateThemeIcons(false);
+  }
+})();
 
-// ── BOOT ──────────────────────────────────────────────────
 initData();
 </script>
 </body>
