@@ -14,7 +14,7 @@ A data-structures Arabic morphological engine that:
 - **Normalization** for Arabic normalization & validation
 - **Generation** and **Validation** of derived words
 - **Root management** (insert, search, delete)
-- **Pattern management** (insert, update, remove)
+- **Pattern management** (insert, search, delete)
 
 ## Project Structure
 ```
