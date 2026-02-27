@@ -3,7 +3,8 @@
 A data-structures Arabic morphological engine that:
 - Stores Arabic roots in a Binary Search Tree (BST)
 - Stores morphological patterns in a hash table with chaining
-- Generates derived forms using the pattern derivation rules
+- Generates derived words using patterns derivation rules
+- Generates morphological family using patterns derivation rules
 - Validates whether a word can be derived from a given root
 
 ## Features
@@ -12,6 +13,8 @@ A data-structures Arabic morphological engine that:
 - **Linked lists** for derived words and collision handling
 - **Normalization** for Arabic normalization & validation
 - **Generation** and **Validation** of derived words
+- **Root management** (insert, search, delete)
+- **Pattern management** (insert, update, remove)
 
 ## Project Structure
 ```
@@ -23,6 +26,9 @@ Data_Structures/
 Data/
   roots.txt           # Root dataset
   patterns.txt        # Pattern dataset
+Engine/
+  generator.py       
+  validator.py    
 ```
 
 ## How It Works
@@ -36,6 +42,7 @@ Data/
 - Hash manipulation: **O(1)** average, **O(P)** worst
 - Generation (1 word): **O(log n)** average, **O(n)** worst
 - Validation: **O(log n + P)** worst
+
 **Where:**
 - **n** = number of roots  
 - **P** = number of patterns  
