@@ -18,6 +18,8 @@ A data-structures Arabic morphological engine that:
 
 ## Project Structure
 ```
+server.py             # Flask server that serves the UI and API endpoints
+main.py               # CLI entrypoint (terminal menu)
 Data_Structures/
   root_tree.py        # Binary Search Tree 
   hash_table.py       # Hash table 
@@ -29,6 +31,8 @@ Data/
 Engine/
   generator.py       
   validator.py    
+UI/
+  Interface.html      # Web UI
 ```
 
 ## How It Works
@@ -46,3 +50,188 @@ Engine/
 **Where:**
 - **n** = number of roots  
 - **P** = number of patterns  
+
+## Flask Server Installation and Run Guide
+
+The web UI is served by `server.py` using Flask.
+
+> Important: run the commands from the **project root** (the folder that contains `Data/`, `UI/`, and `server.py`) so relative paths resolve correctly.
+
+### Prerequisites
+- Python 3.10+ installed
+- `pip` available
+
+### Windows (PowerShell)
+```powershell
+cd path\to\DSA_Project
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install flask
+python server.py
+```
+
+Then open:
+- `http://127.0.0.1:5000`
+
+### Linux (bash)
+```bash
+cd /path/to/DSA_Project
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install flask
+python server.py
+```
+
+Then open:
+- `http://127.0.0.1:5000`
+
+### Stop the server
+- Press `Ctrl + C` in the terminal running Flask.
+
+## CLI (No Flask)
+
+You can also run the project as a command-line interface (CLI):
+
+```bash
+python main.py
+```
+
+This opens an interactive menu in the terminal for inserting/searching roots, managing patterns, and generating/validating words.
+
+## API Endpoints (Flask)
+
+Base URL (default): `http://127.0.0.1:5000`
+
+### `POST /generate`
+Generate one derived word from a root + pattern.
+
+Example:
+```bash
+curl -X POST http://127.0.0.1:5000/generate \
+  -H "Content-Type: application/json" \
+  -d '{"root":"ك-ت-ب","pattern":"فاعل"}'
+```
+
+### `POST /generate_family`
+Generate a list of derived words across all patterns.
+
+Example:
+```bash
+curl -X POST http://127.0.0.1:5000/generate_family \
+  -H "Content-Type: application/json" \
+  -d '{"root":"ك-ت-ب"}'
+```
+
+### `POST /validate`
+Validate whether a word can be derived from the given root.
+
+Example:
+```bash
+curl -X POST http://127.0.0.1:5000/validate \
+  -H "Content-Type: application/json" \
+  -d '{"root":"ك-ت-ب","word":"كاتب"}'
+```
+
+### `POST /add_root`
+Add a new root (dashed form).
+
+Example:
+```bash
+curl -X POST http://127.0.0.1:5000/add_root \
+  -H "Content-Type: application/json" \
+  -d '{"root":"س-م-ع"}'
+```
+
+### `POST /add_pattern`
+Add a new pattern.
+
+Example:
+```bash
+curl -X POST http://127.0.0.1:5000/add_pattern \
+  -H "Content-Type: application/json" \
+  -d '{"pattern":"مفاعل"}'
+```
+
+### `GET /api/roots`
+List all roots.
+
+Example:
+```bash
+curl http://127.0.0.1:5000/api/roots
+```
+
+### `GET /api/patterns`
+List all patterns.
+
+Example:
+```bash
+curl http://127.0.0.1:5000/api/patterns
+```
+
+## Data Files Format
+
+The application loads its datasets from:
+- `Data/roots.txt`
+- `Data/patterns.txt`
+
+Both files are plain text (`UTF-8`), with **one entry per line**.
+
+### Roots (`Data/roots.txt`)
+- Format: dashed triliteral roots like `ك-ت-ب`
+- One root per line
+
+Example:
+```
+ك-ت-ب
+د-خ-ل
+س-م-ع
+```
+
+### Patterns (`Data/patterns.txt`)
+- Format: Arabic pattern strings such as `فاعل`, `مفعول`, `تفعيل`, ...
+- One pattern per line
+- Diacritics may appear in some patterns; the engine normalizes input.
+
+Example:
+```
+فاعل
+مفعول
+تفعيل
+```
+
+## Tests
+
+This repository includes executable test scripts (they write results to text files).
+
+From the project root:
+
+```bash
+# System/extreme test (writes to test_main_output.txt)
+python test_main.py
+
+# Data structures tests (write to Data_Structures/output.txt)
+python Data_Structures/test_root.py
+python Data_Structures/test_hash_table.py
+python Data_Structures/test_integrated.py
+```
+
+## Troubleshooting
+
+- **`ModuleNotFoundError: No module named 'flask'`**: activate your venv and run `python -m pip install flask`.
+- **Windows venv activation blocked** (PowerShell execution policy): run PowerShell as admin and use:
+  ```powershell
+  Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+  ```
+- **Port already in use**: stop the process using port `5000`, or set another port (example):
+- **Port already in use**: stop the process using port `5000`, or change the port in `server.py` (example):
+  ```python
+  app.run(debug=True, port=5001)
+  ```
+- **Data files not found**: make sure you run `python server.py` from the project root so `Data/roots.txt` and `Data/patterns.txt` resolve.
+- **Linux: UI file name is case-sensitive**: the UI is `UI/Interface.html` (capital `I`).
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE`.
