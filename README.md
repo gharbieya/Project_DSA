@@ -90,7 +90,7 @@ Then open:
 ### Stop the server
 - Press `Ctrl + C` in the terminal running Flask.
 
-## CLI (No Flask)
+## CLI
 
 You can also run the project as a command-line interface (CLI):
 
