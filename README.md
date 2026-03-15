@@ -201,37 +201,6 @@ Example:
 تفعيل
 ```
 
-## Tests
-
-This repository includes executable test scripts (they write results to text files).
-
-From the project root:
-
-```bash
-# System/extreme test (writes to test_main_output.txt)
-python test_main.py
-
-# Data structures tests (write to Data_Structures/output.txt)
-python Data_Structures/test_root.py
-python Data_Structures/test_hash_table.py
-python Data_Structures/test_integrated.py
-```
-
-## Troubleshooting
-
-- **`ModuleNotFoundError: No module named 'flask'`**: activate your venv and run `python -m pip install flask`.
-- **Windows venv activation blocked** (PowerShell execution policy): run PowerShell as admin and use:
-  ```powershell
-  Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-  ```
-- **Port already in use**: stop the process using port `5000`, or set another port (example):
-- **Port already in use**: stop the process using port `5000`, or change the port in `server.py` (example):
-  ```python
-  app.run(debug=True, port=5001)
-  ```
-- **Data files not found**: make sure you run `python server.py` from the project root so `Data/roots.txt` and `Data/patterns.txt` resolve.
-- **Linux: UI file name is case-sensitive**: the UI is `UI/Interface.html` (capital `I`).
-
 ## License
 
 This project is licensed under the MIT License. See `LICENSE`.
